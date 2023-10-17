@@ -1,0 +1,70 @@
+<html>
+<head>
+    <title>Lecturas del contador de gas</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        button {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="generarTabla()">Obtener consumos de los últimos meses</button>
+    <table id="tablaLecturas">
+        <tr>
+            <th>Periodo</th>
+            <th>Lectura (m3)</th>
+        </tr>
+    </table>
+
+    <script>
+        function generarTabla() {
+            var fechaActual = new Date();
+            var tabla = document.getElementById("tablaLecturas");
+
+            // Obtener los últimos 6 meses anteriores al actual
+            for (var i = 0; i <= 5; i++) {
+                var fecha = new Date();
+                fecha.setMonth(fecha.getMonth() - i);
+
+                // Generar un valor de lectura ficticio
+                var lectura = Math.floor(Math.random() * 100) + 1;
+
+                // Crear una nueva fila en la tabla
+                var fila = tabla.insertRow();
+
+                // Insertar la fecha y la lectura en la fila
+                var celdaFecha = fila.insertCell(0);
+                celdaFecha.innerHTML = obtenerNombreMes(fecha.getMonth()) + " " + fecha.getFullYear();
+
+                var celdaLectura = fila.insertCell(1);
+                celdaLectura.innerHTML = lectura;
+            }
+        }
+
+        function obtenerNombreMes(numeroMes) {
+            var meses = [
+                "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+            ];
+            return meses[numeroMes];
+        }
+    </script>
+</body>
+</html>
