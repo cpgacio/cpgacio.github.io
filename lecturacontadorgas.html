@@ -1,69 +1,109 @@
 <html>
 <head>
-    <title>Lecturas del contador de gas</title>
+    <title>Consumo de gas</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
         table {
             border-collapse: collapse;
             width: 100%;
         }
-        
+
         th, td {
-            text-align: left;
+            border: 1px solid black;
             padding: 8px;
+            text-align: center;
         }
-        
+
         th {
-            background-color: #f2f2f2;
+            background-color: #E57100;
         }
-        
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        
-        button {
-            margin-bottom: 10px;
+
+        #chart {
+            width: 600px;
+            height: 400px;
+            margin: 20px auto;
         }
     </style>
 </head>
 <body>
-    <button onclick="generarTabla()">Obtener consumos de los últimos meses</button>
-    <table id="tablaLecturas">
+    <h1>Consumo de gas</h1>
+    <button onclick="mostrarConsumo()">Mostrar Consumo Últimos Meses</button>
+    <br><br>
+    <table id="tabla" style="display: none;">
         <tr>
-            <th>Periodo</th>
-            <th>Lectura (m3)</th>
+            <th>Mes</th>
+            <th>Consumo</th>
+        </tr>
+        <tr>
+            <td>Mayo 2023</td>
+            <td id="Mayo 2023"></td>
+        </tr>
+        <tr>
+            <td>Junio 2023</td>
+            <td id="Junio 2023"></td>
+        </tr>
+        <tr>
+            <td>Julio 2023</td>
+            <td id="Julio 2023"></td>
+        </tr>
+        <tr>
+            <td>Agosto 2023</td>
+            <td id="Agosto 2023"></td>
+        </tr>
+        <tr>
+            <td>Septiembre 2023</td>
+            <td id="Septiembre 2023"></td>
+        </tr>
+        <tr>
+            <td>Octubre 2023</td>
+            <td id="Octubre 2023"></td>
         </tr>
     </table>
+    <div id="chart"></div>
 
     <script>
-        function generarTabla() {
-            var fechaActual = new Date();
-            var tabla = document.getElementById("tablaLecturas");
+        function mostrarConsumo() {
+            var valores = generarValoresAleatorios();
+            document.getElementById("Mayo 2023").textContent = valores[0];
+            document.getElementById("Junio 2023").textContent = valores[1];
+            document.getElementById("Julio 2023").textContent = valores[2];
+            document.getElementById("Agosto 2023").textContent = valores[3];
+            document.getElementById("Septiembre 2023").textContent = valores[4];
+            document.getElementById("Octubre 2023").textContent = valores[5];
 
-            // Obtener los últimos 6 meses anteriores al actual
-            for (var i = 0; i <= 5; i++) {
-                var fecha = new Date();
-                fecha.setMonth(fecha.getMonth() - i);
+            document.getElementById("tabla").style.display = "table";
 
-                // Generar un valor de lectura ficticio
-                var lectura = Math.floor(Math.random() * 100) + 1;
-
-                // Crear una nueva fila en la tabla
-                var fila = tabla.insertRow();
-
-                // Insertar la fecha y la lectura en la fila
-                var celdaFecha = fila.insertCell(0);
-                celdaFecha.innerHTML = obtenerNombreMes(fecha.getMonth()) + " " + fecha.getFullYear();
-
-                var celdaLectura = fila.insertCell(1);
-                celdaLectura.innerHTML = lectura;
-            }
+            dibujarGrafico(valores);
         }
 
-        function obtenerNombreMes(numeroMes) {
-            var meses = [
-                "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-            ];
-            return meses[numeroMes];
+        function generarValoresAleatorios() {
+            var valores = [];
+            for (var i = 0; i < 6; i++) {
+                valores.push(Math.floor(Math.random() * 100));
+            }
+            return valores;
+        }
+
+        function dibujarGrafico(valores) {
+            var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio"];
+
+            var data = [{
+                x: meses,
+                y: valores,
+                type: 'bar'
+            }];
+
+            var layout = {
+                title: 'Consumo de gas',
+                xaxis: {
+                    title: 'Mes'
+                },
+                yaxis: {
+                    title: 'Consumo (m3)'
+                }
+            };
+
+            Plotly.newPlot('chart', data, layout);
         }
     </script>
 </body>
