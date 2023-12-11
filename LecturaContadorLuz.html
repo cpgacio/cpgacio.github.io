@@ -1,0 +1,110 @@
+<html>
+<head>
+    <title>Consumo de Luz</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #E57100;
+        }
+
+        #chart {
+            width: 600px;
+            height: 400px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Consumo de Luz</h1>
+    <button onclick="mostrarConsumo()">Mostrar Consumo de los Últimos Meses</button>
+    <br><br>
+    <table id="tabla" style="display: none;">
+        <tr>
+            <th>Mes</th>
+            <th>Lectura (KWh)</th>
+        </tr>
+        <tr>
+            <td>Junio 2023</td>
+            <td id="Junio 2023"></td>
+        </tr>
+        <tr>
+            <td>Julio 2023</td>
+            <td id="Julio 2023"></td>
+        </tr>
+        <tr>
+            <td>Agosto 2023</td>
+            <td id="Agosto 2023"></td>
+        </tr>
+        <tr>
+            <td>Septiembre 2023</td>
+            <td id="Septiembre 2023"></td>
+        </tr>
+        <tr>
+            <td>Octubre 2023</td>
+            <td id="Octubre 2023"></td>
+        </tr>
+        <tr>
+            <td>Noviembre 2023</td>
+            <td id="Noviembre 2023"></td>
+        </tr>
+    </table>
+    <div id="chart"></div>
+
+    <script>
+        function mostrarConsumo() {
+            var valores = generarValoresAleatorios();
+            document.getElementById("Junio 2023").textContent = valores[0];
+            document.getElementById("Julio 2023").textContent = valores[1];
+            document.getElementById("Agosto 2023").textContent = valores[2];
+            document.getElementById("Septiembre 2023").textContent = valores[3];
+            document.getElementById("Octubre 2023").textContent = valores[4];
+            document.getElementById("Noviembre 2023").textContent = valores[5];
+
+            document.getElementById("tabla").style.display = "table";
+
+            dibujarGrafico(valores);
+        }
+
+        function generarValoresAleatorios() {
+            var valores = [];
+            for (var i = 0; i < 6; i++) {
+                valores.push(Math.floor(Math.random() * 100));
+            }
+            return valores;
+        }
+
+        function dibujarGrafico(valores) {
+            var meses = ["Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre"];
+
+            var data = [{
+                x: meses,
+                y: valores,
+                type: 'bar'
+            }];
+
+            var layout = {
+                title: 'Consumo de Luz',
+                xaxis: {
+                    title: 'Mes'
+                },
+                yaxis: {
+                    title: 'Consumo (KWh)'
+                }
+            };
+
+            Plotly.newPlot('chart', data, layout);
+        }
+    </script>
+</body>
+</html>
