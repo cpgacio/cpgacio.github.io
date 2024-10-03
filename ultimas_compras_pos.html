@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Table</title>
+    <style>
+        body {
+            font-family: "72", Arial, Helvetica, sans-serif;
+            padding: 20px;
+            background-color: #f7f7f7;
+        }
+        h1 {
+            color: #333;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .table-container {
+            margin-top: 20px;
+            display: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+        .hyperlink {
+            color: #007bff;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .hyperlink:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Últimas Compras</h1>
+    </header>
+    <main>
+        <button id="showTableBtn" class="btn">Obtener</button>
+        <div class="table-container" id="tableContainer">
+            <table id="ticketTable">
+                <thead>
+                    <tr>
+                        <th>Ticket ID</th>
+                        <th>Total</th>
+                        <th>Fecha</th>
+                        <th>Descuento</th>
+                        <th>Voucher</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="hyperlink">67813</td>
+                        <td>€ 49.50</td>
+                        <td>19 abril 2024</td>
+                        <td>€ 4.95</td>
+                        <td>10OFF</td>
+                    </tr>
+                    <tr>
+                        <td class="hyperlink">135621</td>
+                        <td>€ 80.00</td>
+                        <td>31 mayo 2024</td>
+                        <td>€ 12.00</td>
+                        <td>15CLUB</td>
+                    </tr>
+                    <tr>
+                        <td class="hyperlink">446881</td>
+                        <td>€ 12.90</td>
+                        <td>20 julio 2024</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td class="hyperlink">1890182</td>
+                        <td>€ 56.00</td>
+                        <td>8 agosto 2024</td>
+                        <td>-</td>
+                        <td>12SCHOOL</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <script>
+        document.getElementById('showTableBtn').addEventListener('click', function() {
+            document.getElementById('tableContainer').style.display = 'block';
+        });
+
+        // Simular comportamiento de hipervínculo
+        document.querySelectorAll('.hyperlink').forEach(function(ticket) {
+            ticket.addEventListener('click', function() {
+                alert('Clicked on ticket number: ' + this.textContent);
+            });
+        });
+    </script>
+</body>
+</html>
