@@ -3,142 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer's Coupons Issued</title>
+    <title>Coupones expedidos</title>
     <style>
-        /* SAP Build Apps like theme */
         body {
-            font-family: "72", Arial, sans-serif;
-            background-color: #f3f4f5;
-            margin: 0;
+            font-family: "72", Arial, Helvetica, sans-serif;
             padding: 20px;
+            background-color: #f7f7f7;
         }
-
-        .sap_table {
+        h1 {
+            color: #333;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .table-container {
+            margin-top: 20px;
+            display: none;
+        }
+        table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
-            background-color: #ffffff;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .sap_table th, .sap_table td {
-            border: 1px solid #d2d2d2;
-            text-align: left;
-            padding: 10px;
-        }
-
-        .sap_table th {
-            background-color: #e9ecee;
-            font-weight: bold;
-        }
-
-        .copy-button {
-            display: inline-flex;
-            align-items: center;
-            background-color: #007bff;
-            color: #ffffff;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
+            background-color: white;
             border-radius: 4px;
-            font-size: 14px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-
-        .copy-button i {
-            margin-right: 5px;
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
         }
     </style>
 </head>
 <body>
-    <h1>Coupons Issued</h1>
-    <table class="sap_table">
-        <thead>
-            <tr>
-                <th>Coupon ID</th>
-                <th>Redeem</th>
-                <th>Expiration Date</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="couponTable">
-            <!-- Rows will be added by JavaScript -->
-        </tbody>
-    </table>
-
+    <header>
+        <h1>Cupones Expedidos</h1>
+    </header>
+    <main>
+        <button id="showTableBtn" class="btn">Obtener</button>
+        <div class="table-container" id="tableContainer">
+            <table id="voucherTable">
+                <thead>
+                    <tr>
+                        <th>Voucher</th>
+                        <th>Recibido</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>10OFF</td>
+                        <td>Si</td>
+                        <td>5-Apr</td>
+                    </tr>
+                    <tr>
+                        <td>15CLUB</td>
+                        <td>Si</td>
+                        <td>20-May</td>
+                    </tr>
+                    <tr>
+                        <td>5VERANO</td>
+                        <td>Si</td>
+                        <td>18-Jul</td>
+                    </tr>
+                    <tr>
+                        <td>12SCHOOL</td>
+                        <td>Si</td>
+                        <td>6-Aug</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
     <script>
-        function getRandomString(length) {
-            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let result = '';
-            for (let i = 0; i < length; i++) {
-                result += characters.charAt(Math.floor(Math.random() * characters.length));
-            }
-            return result;
-        }
-
-        function getRandomDate() {
-            const today = new Date();
-            const futureDate = new Date(today);
-            futureDate.setDate(today.getDate() + Math.floor(Math.random() * 30)); // a date within the next 30 days
-            return futureDate.toISOString().split('T')[0]; // return date in YYYY-MM-DD format
-        }
-
-        function getRandomBoolean() {
-            return Math.random() < 0.5 ? 'Yes' : 'No';
-        }
-
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert(`Copied: ${text}`);
-            }).catch(err => {
-                console.error("Failed to copy: ", err);
-            });
-        }
-
-        function generateTableData() {
-            const numberOfRows = Math.floor(Math.random() * 5) + 1;
-            const data = [];
-            
-            for (let i = 0; i < numberOfRows; i++) {
-                data.push({
-                    couponID: getRandomString(6),
-                    redeem: getRandomBoolean(),
-                    expirationDate: getRandomDate()
-                });
-            }
-
-            // Sort data by expirationDate in descending order
-            data.sort((a, b) => new Date(b.expirationDate) - new Date(a.expirationDate));
-
-            const tableBody = document.getElementById('couponTable');
-
-            data.forEach(rowData => {
-                const row = document.createElement('tr');
-                const couponIDCell = document.createElement('td');
-                const redeemCell = document.createElement('td');
-                const expirationDateCell = document.createElement('td');
-                const actionCell = document.createElement('td');
-
-                couponIDCell.textContent = rowData.couponID;
-                redeemCell.textContent = rowData.redeem;
-                expirationDateCell.textContent = rowData.expirationDate;
-
-                const copyButton = document.createElement('button');
-                copyButton.className = 'copy-button';
-                copyButton.innerHTML = '<i>📋</i> Copy';
-                copyButton.onclick = () => copyToClipboard(rowData.couponID);
-
-                actionCell.appendChild(copyButton);
-
-                row.appendChild(couponIDCell);
-                row.appendChild(redeemCell);
-                row.appendChild(expirationDateCell);
-                row.appendChild(actionCell);
-
-                tableBody.appendChild(row);
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', generateTableData);
+        document.getElementById('showTableBtn').addEventListener('click', function() {
+            document.getElementById('tableContainer').style.display = 'block';
+        });
     </script>
 </body>
 </html>
