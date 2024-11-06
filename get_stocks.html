@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse Table Generator</title>
+    <style>
+        body {
+            font-family: "72", sans-serif;
+            background-color: #fafafa;
+            margin: 0;
+            padding: 20px;
+            color: #32363a;
+        }
+        .container {
+            margin: auto;
+            max-width: 800px;
+            text-align: center;
+        }
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .controls label {
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .sapButton {
+            background-color: #0a6ed1;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            margin-left: 10px;
+        }
+        .sapButton:hover {
+            background-color: #0854a0;
+        }
+        .dropdown-input {
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            width: 200px;
+        }
+        .suggestions {
+            position: absolute;
+            top: 50px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            width: 200px;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 1;
+        }
+        .suggestions div {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .suggestions div:hover {
+            background-color: #f1f1f1;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            background: white;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #e5f7ff;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const products = ["Multi Eco 11i", "Multi eco 22i", "Multi eco 33i"];
+            const input = document.getElementById('productInput');
+            const suggestionsContainer = document.getElementById('suggestions');
+
+            input.addEventListener('input', function() {
+                const query = input.value.toLowerCase();
+                suggestionsContainer.innerHTML = '';
+                
+                if (query) {
+                    const filteredProducts = products.filter(product => product.toLowerCase().includes(query));
+                    filteredProducts.forEach(product => {
+                        const suggestion = document.createElement('div');
+                        suggestion.textContent = product;
+                        suggestion.addEventListener('click', function() {
+                            input.value = product;
+                            suggestionsContainer.innerHTML = '';
+                        });
+                        suggestionsContainer.appendChild(suggestion);
+                    });
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!document.querySelector('.controls').contains(event.target)) {
+                    suggestionsContainer.innerHTML = '';
+                }
+            });
+        });
+
+        function generateRandomInteger(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function generateRandomFutureDate(minDays, maxDays) {
+            const today = new Date();
+            const minDate = new Date(today);
+            const maxDate = new Date(today);
+            minDate.setDate(today.getDate() + minDays);
+            maxDate.setDate(today.getDate() + maxDays);
+
+            const randomDate = new Date(minDate.getTime() + Math.random() * (maxDate.getTime() - minDate.getTime()));
+            return randomDate.toISOString().slice(0, 10); // Format to YYYY-MM-DD
+        }
+
+        function generateTable() {
+            const warehouses = ['Algeciras (ES)', 'Barcelona (ES)', 'Bilbao (ES)', 'Cartegena (ES)', 'Gerona (ES)', 'Lisbon (PT)', 'Seville (ES)', 'Tarragona (ES)', 'Valencia (ES)', 'Vigo (ES)'];
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+
+            // Explicitly assign 0 values for No. Items to some entries
+            const data = warehouses.map(warehouse => {
+                const noItems = Math.random() > 0.2 ? generateRandomInteger(1, 999) : 0; // About 20% chance to be 0
+
+                return {
+                    warehouse: warehouse,
+                    noItems: noItems,
+                    atp: noItems === 0 ? '' : generateRandomFutureDate(2, 10)
+                };
+            });
+
+            // Sort data by ATP, ascending, and move rows with 0 No. Items to the end
+            data.sort((a, b) => {
+                if (a.noItems === 0) return 1;
+                if (b.noItems === 0) return -1;
+                return new Date(a.atp) - new Date(b.atp);
+            });
+
+            // Create and append rows to the table
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.warehouse}</td>
+                    <td>${item.noItems}</td>
+                    <td>${item.atp}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <label for="productInput">Select an item:</label>
+            <input type="text" id="productInput" class="dropdown-input" placeholder="Type to search...">
+            <div id="suggestions" class="suggestions"></div>
+            <button class="sapButton" onclick="generateTable()">Get stocks</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Warehouse</th>
+                    <th>No. Items</th>
+                    <th>ATP</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- Table rows will be generated here -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
