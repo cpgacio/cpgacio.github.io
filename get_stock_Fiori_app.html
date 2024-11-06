@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Availability per Warehouse</title>
+    <script id="sap-ui-bootstrap"
+            src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js"
+            data-sap-ui-theme="sap_fiori_3"
+            data-sap-ui-libs="sap.m"
+            data-sap-ui-compatversion="edge"
+            data-sap-ui-preload="async"></script>
+    <script>
+        sap.ui.getCore().attachInit(function () {
+            sap.ui.require([
+                "sap/ui/core/Fragment",
+                "sap/m/Input",
+                "sap/m/Button",
+                "sap/m/Table",
+                "sap/m/Column",
+                "sap/m/Label",
+                "sap/m/Text",
+                "sap/m/ColumnListItem",
+                "sap/m/Page",
+                "sap/m/App",
+                "sap/m/VBox"
+            ], function (Fragment, Input, Button, Table, Column, Label, Text, ColumnListItem, Page, App, VBox) {
+                
+                function generateRandomInteger(min, max) {
+                    return Math.floor(Math.random() * (max - min + 1)) + min;
+                }
+
+                function generateRandomFutureDate(minDays, maxDays) {
+                    const today = new Date();
+                    const minDate = new Date(today);
+                    const maxDate = new Date(today);
+                    minDate.setDate(today.getDate() + minDays);
+                    maxDate.setDate(today.getDate() + maxDays);
+
+                    const randomDate = new Date(minDate.getTime() + Math.random() * (maxDate.getTime() - minDate.getTime()));
+                    return randomDate.toISOString().slice(0, 10); // Format to YYYY-MM-DD
+                }
+
+                function generateTable() {
+                    const warehouses = ['Algeciras (ES)', 'Barcelona (ES)', 'Bilbao (ES)', 'Cartegena (ES)', 'Gerona (ES)', 'Lisbon (PT)', 'Seville (ES)', 'Tarragona (ES)', 'Valencia (ES)', 'Vigo (ES)'];
+                    let data = [];
+
+                    warehouses.forEach(warehouse => {
+                        const noItems = Math.random() > 0.2 ? generateRandomInteger(1, 999) : 0; // About 20% chance to be 0
+                        const atp = noItems === 0 ? '' : generateRandomFutureDate(2, 10);
+
+                        data.push({
+                            warehouse: warehouse,
+                            noItems: noItems,
+                            atp: atp
+                        });
+                    });
+
+                    // Sort data by ATP, ascending, and move rows with 0 No. Items to the end
+                    data.sort((a, b) => {
+                        if (a.noItems === 0) return 1;
+                        if (b.noItems === 0) return -1;
+                        return new Date(a.atp) - new Date(b.atp);
+                    });
+
+                    return data;
+                }
+
+                const oInput = new Input({
+                    placeholder: "Type to search...",
+                    showSuggestion: true,
+                    suggestionItems: [
+                        new sap.ui.core.Item({ text: "Multi Eco 11i" }),
+                        new sap.ui.core.Item({ text: "Multi Eco 22i" }),
+                        new sap.ui.core.Item({ text: "Multi Eco 33i" })
+                    ]
+                });
+
+                const oButton = new Button({
+                    text: "Get stocks",
+                    press: function () {
+                        const data = generateTable();
+                        const oTableModel = new sap.ui.model.json.JSONModel();
+                        oTableModel.setData({ warehouses: data });
+                        oTable.setModel(oTableModel);
+                    }
+                });
+
+                const oTable = new Table({
+                    columns: [
+                        new Column({
+                            header: new Label({ text: "Warehouse" })
+                        }),
+                        new Column({
+                            header: new Label({ text: "No. Items" })
+                        }),
+                        new Column({
+                            header: new Label({ text: "ATP" })
+                        })
+                    ]
+                });
+
+                const oTemplate = new ColumnListItem({
+                    cells: [
+                        new Text({ text: "{warehouse}" }),
+                        new Text({ text: "{noItems}" }),
+                        new Text({ text: "{atp}" })
+                    ]
+                });
+
+                oTable.bindItems("/warehouses", oTemplate);
+
+                const oVBox = new VBox({
+                    items: [
+                        new sap.m.Label({ text: "Select an item:", labelFor: oInput }),
+                        oInput,
+                        oButton,
+                        oTable
+                    ],
+                    alignItems: "Center",
+                    spacing: 2
+                });
+
+                const oPage = new Page({
+                    title: "Stock Availability per Warehouse",
+                    content: [oVBox]
+                });
+
+                const oApp = new App({
+                    pages: [oPage]
+                });
+
+                oApp.placeAt("content");
+            });
+        });
+    </script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "72", sans-serif;
+        }
+        #content {
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="sapUiBody" id="content">
+</body>
+</html>
