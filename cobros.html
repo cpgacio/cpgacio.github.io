@@ -108,7 +108,11 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             padding: 20px;
             z-index: 1000;
-            width: 300px;
+            width: 350px; /* Ancho ajustado */
+        }
+
+        .popup-content {
+            margin: 0 10px; /* Márgenes laterales */
         }
 
         .overlay {
@@ -124,9 +128,16 @@
         .popup input,
         .popup select,
         .popup button {
-            width: 100%;
+            width: calc(100% - 20px); /* Espacio de margen */
             margin: 10px 0;
             padding: 8px;
+            box-sizing: border-box;
+        }
+
+        .popup input[readonly] {
+            background-color: #f0f0f0;
+            color: #888;
+            border: 1px solid #ccc;
         }
 
         .popup button {
@@ -156,7 +167,7 @@
 
 <body>
     <div class="container">
-        <h1>Gestión de Facturas</h1>
+        <h1>Gestión de Cobros</h1>
         <button id="showInvoices">Facturas Abiertas</button>
 
         <table id="invoicesTable" class="hidden">
@@ -175,22 +186,24 @@
         </table>
 
         <div id="popup" class="popup hidden">
-            <form id="paymentForm">
-                <h3>Detalles de Pago</h3>
-                <input type="text" id="popupInvoiceId" readonly>
-                <input type="text" id="popupInvoiceValue" readonly>
-                <input type="text" id="popupInvoiceDate" readonly>
+            <div class="popup-content">
+                <form id="paymentForm">
+                    <h3>Detalles de Pago</h3>
+                    <input type="text" id="popupInvoiceId" readonly>
+                    <input type="text" id="popupInvoiceValue" readonly>
+                    <input type="text" id="popupInvoiceDate" readonly>
 
-                <label for="paymentType">Tipo de Pago:</label>
-                <select id="paymentType" required>
-                    <option value="total">Total</option>
-                    <option value="partial">Parcial</option>
-                </select>
+                    <label for="paymentType">Tipo de Pago:</label>
+                    <select id="paymentType" required>
+                        <option value="total">Total</option>
+                        <option value="partial">Parcial</option>
+                    </select>
 
-                <input type="number" id="paymentAmount" placeholder="Cantidad a pagar" disabled required>
+                    <input type="number" id="paymentAmount" placeholder="Cantidad a pagar (€)" disabled required>
 
-                <button type="submit">Cobro</button>
-            </form>
+                    <button type="submit">Cobro</button>
+                </form>
+            </div>
         </div>
         <div id="overlay" class="overlay hidden"></div>
 
@@ -221,7 +234,7 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${invoice.id}</td>
-                    <td>${invoice.value}</td>
+                    <td>${formatCurrency(invoice.value)}</td>
                     <td>${invoice.date}</td>
                     <td><span class="status ${invoice.status === 'Pendiente' ? 'status-pending' : 'status-paid'}">${invoice.status}</span></td>
                     <td>
@@ -243,9 +256,9 @@
 
         function openPopup(index) {
             const invoice = invoices[index];
-            document.getElementById('popupInvoiceId').value = invoice.id;
-            document.getElementById('popupInvoiceValue').value = invoice.value;
-            document.getElementById('popupInvoiceDate').value = invoice.date;
+            document.getElementById('popupInvoiceId').value = `ID: ${invoice.id}`;
+            document.getElementById('popupInvoiceValue').value = `Valor: ${formatCurrency(invoice.value)}`;
+            document.getElementById('popupInvoiceDate').value = `Fecha: ${invoice.date}`;
             document.getElementById('paymentType').value = 'total';
             document.getElementById('paymentAmount').disabled = true;
             document.getElementById('paymentAmount').value = '';
@@ -260,7 +273,7 @@
                 paymentAmount.disabled = false;
             } else {
                 paymentAmount.disabled = true;
-                paymentAmount.value = document.getElementById('popupInvoiceValue').value;
+                paymentAmount.value = '';
             }
         });
 
@@ -294,6 +307,13 @@
             const futureDate = new Date(today);
             futureDate.setDate(today.getDate() + Math.floor(Math.random() * 30) + 1);
             return futureDate.toISOString().split('T')[0];
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('es-ES', {
+                style: 'currency',
+                currency: 'EUR'
+            }).format(value);
         }
     </script>
 </body>
