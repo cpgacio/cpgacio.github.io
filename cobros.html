@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facturas Abiertas</title>
+    <style>
+        /* Estilos base para el diseño SAP */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #0a6ed1;
+        }
+
+        button {
+            background-color: #0a6ed1;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        button:hover {
+            background-color: #084b8a;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin-top: 10px;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #0a6ed1;
+            color: white;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .status {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: white;
+            display: inline-block;
+        }
+
+        .status-pending {
+            background-color: #e74c3c; /* Rojo */
+        }
+
+        .status-paid {
+            background-color: #2ecc71; /* Verde */
+        }
+
+        .icon-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #0a6ed1;
+        }
+
+        .icon-button:hover {
+            color: #084b8a;
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            z-index: 1000;
+            width: 300px;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .popup input,
+        .popup select,
+        .popup button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 8px;
+        }
+
+        .popup button {
+            background-color: #0a6ed1;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .popup button:hover {
+            background-color: #084b8a;
+        }
+
+        .message {
+            text-align: center;
+            color: #28a745;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .icon {
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Gestión de Facturas</h1>
+        <button id="showInvoices">Facturas Abiertas</button>
+
+        <table id="invoicesTable" class="hidden">
+            <thead>
+                <tr>
+                    <th>ID Factura</th>
+                    <th>Valor (€)</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Filas generadas dinámicamente -->
+            </tbody>
+        </table>
+
+        <div id="popup" class="popup hidden">
+            <form id="paymentForm">
+                <h3>Detalles de Pago</h3>
+                <input type="text" id="popupInvoiceId" readonly>
+                <input type="text" id="popupInvoiceValue" readonly>
+                <input type="text" id="popupInvoiceDate" readonly>
+
+                <label for="paymentType">Tipo de Pago:</label>
+                <select id="paymentType" required>
+                    <option value="total">Total</option>
+                    <option value="partial">Parcial</option>
+                </select>
+
+                <input type="number" id="paymentAmount" placeholder="Cantidad a pagar" disabled required>
+
+                <button type="submit">Cobro</button>
+            </form>
+        </div>
+        <div id="overlay" class="overlay hidden"></div>
+
+        <div id="message" class="message hidden"></div>
+    </div>
+
+    <script>
+        const invoices = [
+            { id: generateId(), value: randomValue(), date: randomDate(), status: "Pendiente" },
+            { id: generateId(), value: randomValue(), date: randomDate(), status: "Pendiente" }
+        ];
+
+        const invoicesTable = document.getElementById('invoicesTable');
+        const showInvoicesButton = document.getElementById('showInvoices');
+        const popup = document.getElementById('popup');
+        const overlay = document.getElementById('overlay');
+        const message = document.getElementById('message');
+
+        showInvoicesButton.addEventListener('click', () => {
+            invoicesTable.classList.remove('hidden');
+            renderTable();
+        });
+
+        function renderTable() {
+            const tbody = invoicesTable.querySelector('tbody');
+            tbody.innerHTML = '';
+            invoices.forEach((invoice, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${invoice.id}</td>
+                    <td>${invoice.value}</td>
+                    <td>${invoice.date}</td>
+                    <td><span class="status ${invoice.status === 'Pendiente' ? 'status-pending' : 'status-paid'}">${invoice.status}</span></td>
+                    <td>
+                        <button class="icon-button" data-index="${index}">
+                            <span class="icon">💳</span>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            document.querySelectorAll('.icon-button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const index = e.target.closest('button').dataset.index;
+                    openPopup(index);
+                });
+            });
+        }
+
+        function openPopup(index) {
+            const invoice = invoices[index];
+            document.getElementById('popupInvoiceId').value = invoice.id;
+            document.getElementById('popupInvoiceValue').value = invoice.value;
+            document.getElementById('popupInvoiceDate').value = invoice.date;
+            document.getElementById('paymentType').value = 'total';
+            document.getElementById('paymentAmount').disabled = true;
+            document.getElementById('paymentAmount').value = '';
+            popup.dataset.index = index;
+            popup.classList.remove('hidden');
+            overlay.classList.remove('hidden');
+        }
+
+        document.getElementById('paymentType').addEventListener('change', (e) => {
+            const paymentAmount = document.getElementById('paymentAmount');
+            if (e.target.value === 'partial') {
+                paymentAmount.disabled = false;
+            } else {
+                paymentAmount.disabled = true;
+                paymentAmount.value = document.getElementById('popupInvoiceValue').value;
+            }
+        });
+
+        document.getElementById('paymentForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const index = popup.dataset.index;
+            invoices[index].status = "Cobrado";
+            renderTable();
+            popup.classList.add('hidden');
+            overlay.classList.add('hidden');
+            message.innerText = `La factura ${invoices[index].id} se ha cobrado correctamente.`;
+            message.classList.remove('hidden');
+            setTimeout(() => message.classList.add('hidden'), 5000);
+        });
+
+        overlay.addEventListener('click', () => {
+            popup.classList.add('hidden');
+            overlay.classList.add('hidden');
+        });
+
+        function generateId() {
+            return Math.floor(Math.random() * 900000000) + 100000000;
+        }
+
+        function randomValue() {
+            return Math.floor(Math.random() * 9900) + 100;
+        }
+
+        function randomDate() {
+            const today = new Date();
+            const futureDate = new Date(today);
+            futureDate.setDate(today.getDate() + Math.floor(Math.random() * 30) + 1);
+            return futureDate.toISOString().split('T')[0];
+        }
+    </script>
+</body>
+
+</html>
