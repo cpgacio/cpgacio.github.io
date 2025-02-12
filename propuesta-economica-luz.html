@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flujo Guiado - Propuesta Económica de Tarifa de Luz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f5f7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+        h2 {
+            color: #0a6ed1;
+        }
+        .step {
+            display: none;
+        }
+        .step.active {
+            display: block;
+        }
+        .steps-navigation {
+            margin-top: 20px;
+        }
+        button {
+            background-color: #0a6ed1;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .tariff-box {
+            border: 1px solid #e1e4e8;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px;
+            width: 150px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+        .recommended {
+            border-color: #ff0;
+            background-color: #fff9e6;
+        }
+        .icon-recommended {
+            color: #ff0;
+            font-size: 18px;
+        }
+        .tariff-box.selected {
+            border-color: #0a6ed1;
+            background-color: #e1f0ff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Propuesta Económica de Tarifa de Luz</h2>
+
+    <div id="step1" class="step active">
+        <h3>Paso 1: Información del Consumo</h3>
+        <label for="consumo">Consumo anual estimado (kWh):</label><br>
+        <input type="number" id="consumo" name="consumo" min="0" value="5000"><br><br>
+
+        <label for="consumoPunta">Porcentaje en Hora Punta (%):</label><br>
+        <input type="number" id="consumoPunta" name="consumoPunta" min="0" max="100" value="50">
+    </div>
+
+    <div id="step2" class="step">
+        <h3>Paso 2: Potencia Contratada</h3>
+        <label for="potencia">Potencia contratada (kW):</label><br>
+        <select id="potencia" name="potencia">
+            <option value="3.45">3.45 kW</option>
+            <option value="4.6">4.6 kW</option>
+            <option value="5.75">5.75 kW</option>
+            <option value="6.9">6.9 kW</option>
+            <option value="8.05">8.05 kW</option>
+            <option value="10.35">10.35 kW</option>
+        </select>
+    </div>
+
+    <div id="step3" class="step">
+        <h3>Paso 3: Equipamiento</h3>
+        <label>
+            <input type="checkbox" id="cocheElectrico" name="cocheElectrico">
+            Coche eléctrico
+        </label><br>
+        <label>
+            <input type="checkbox" id="hornoElectrico" name="hornoElectrico">
+            Horno eléctrico
+        </label><br>
+        <label>
+            <input type="checkbox" id="calefaccion" name="calefaccion">
+            Calefacción eléctrica
+        </label>
+    </div>
+
+    <div id="step4" class="step">
+        <h3>Paso 4: Preferencias y Ubicación</h3>
+        <label for="orientacion">Orientación de la vivienda:</label><br>
+        <select id="orientacion" name="orientacion">
+            <option value="norte">Norte</option>
+            <option value="sur">Sur</option>
+            <option value="este">Este</option>
+            <option value="oeste">Oeste</option>
+        </select><br><br>
+
+        <label for="ubicacion">Ubicación (ciudad):</label><br>
+        <input type="text" id="ubicacion" name="ubicacion" value="Madrid">
+    </div>
+
+    <div id="step5" class="step">
+        <h3>Resultados de la Propuesta</h3>
+        <div id="resultado" class="result"></div>
+        <p>Seleccione una tarifa para enviar la propuesta:</p>
+    </div>
+
+    <div id="step6" class="step">
+        <h3>Confirmación de Envío</h3>
+        <p id="confirmacion"></p>
+    </div>
+
+    <div class="steps-navigation">
+        <button id="prevBtn" onclick="changeStep(-1)" disabled>Anterior</button>
+        <button id="nextBtn" onclick="changeStep(1)">Siguiente</button>
+    </div>
+</div>
+
+<script>
+    let currentStep = 0;
+    const steps = document.querySelectorAll('.step');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    let selectedTariff = null;
+
+    function changeStep(n) {
+        steps[currentStep].classList.remove('active');
+        currentStep += n;
+        if (currentStep >= steps.length) {
+            currentStep = steps.length - 1;
+            sendProposal();
+        } else if (currentStep < steps.length - 2) {
+            steps[currentStep].classList.add('active');
+            nextBtn.disabled = currentStep === steps.length - 2; // Disable if no tariff has been selected
+        } else {
+            calculateProposal();
+            steps[currentStep].classList.add('active');
+        }
+        prevBtn.disabled = (currentStep === 0);
+        nextBtn.textContent = currentStep >= steps.length - 2 ? "Enviar" : "Siguiente";
+    }
+
+    function calculateProposal() {
+        const consumo = parseFloat(document.getElementById('consumo').value) || 5000;
+        const potencia = parseFloat(document.getElementById('potencia').value);
+        const cocheElectrico = document.getElementById('cocheElectrico').checked;
+        const hornoElectrico = document.getElementById('hornoElectrico').checked;
+        const calefaccion = document.getElementById('calefaccion').checked;
+        const consumoPunta = parseFloat(document.getElementById('consumoPunta').value) || 50;
+
+        const baseRate = 0.15;
+        const peakRate = 0.20;
+        const offPeakRate = 0.10;
+        
+        const tarifa1 = consumo * baseRate + potencia * 30;
+        const tarifa2 = (consumo * (consumoPunta / 100) * peakRate) + (consumo * ((100 - consumoPunta) / 100) * offPeakRate) + potencia * 35;
+        const tarifa3 = consumo * baseRate * 1.1 + potencia * 28;
+
+        let finalTarifa1 = tarifa1;
+        let finalTarifa2 = tarifa2;
+        let finalTarifa3 = tarifa3;
+
+        if (cocheElectrico) {
+            finalTarifa1 *= 1.05;
+            finalTarifa2 *= 1.07;
+            finalTarifa3 *= 1.04;
+        }
+        if (hornoElectrico) {
+            finalTarifa1 *= 1.02;
+            finalTarifa2 *= 1.03;
+            finalTarifa3 *= 1.01;
+        }
+        if (calefaccion) {
+            finalTarifa1 *= 1.08;
+            finalTarifa2 *= 1.06;
+            finalTarifa3 *= 1.07;
+        }
+
+        const proposal1 = `Económica: €${finalTarifa1.toFixed(2)}/año`;
+        const proposal2 = `Verde: €${finalTarifa2.toFixed(2)}/año <span class="icon-recommended">⭐</span>`;
+        const proposal3 = `Flex: €${finalTarifa3.toFixed(2)}/año`;
+
+        document.getElementById('resultado').innerHTML = `
+            <div class="tariff-box" onclick="selectTariff(this, 'Económica => €${finalTarifa1.toFixed(2)}/año')">${proposal1}</div>
+            <div class="tariff-box recommended" onclick="selectTariff(this, 'Verde => €${finalTarifa2.toFixed(2)}/año')">${proposal2}</div>
+            <div class="tariff-box" onclick="selectTariff(this, 'Flex => €${finalTarifa3.toFixed(2)}/año')">${proposal3}</div>
+        `;
+        
+        nextBtn.disabled = true; // Disable "Next" button after proposals displayed
+    }
+
+    function selectTariff(element, tariff) {
+        const boxes = document.querySelectorAll('.tariff-box');
+        boxes.forEach(box => box.classList.remove('selected'));
+        element.classList.add('selected');
+        selectedTariff = tariff;
+        nextBtn.disabled = false; // Enable "Next" button once a tariff is selected
+    }
+
+    function sendProposal() {
+        document.getElementById('confirmacion').innerText = `La tarifa seleccionada (${selectedTariff}) ha sido enviada al cliente.`;
+        nextBtn.disabled = true;
+    }
+
+</script>
+
+</body>
+</html>
