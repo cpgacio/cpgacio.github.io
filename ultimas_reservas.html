@@ -64,10 +64,25 @@
             text-decoration: none;
             color: #007bff;
             cursor: pointer;
+            position: relative;
         }
 
         .acciones a:hover {
             color: #0056b3;
+        }
+
+        .tooltip-preferences {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            width: 250px; /* Ajustar ancho del tooltip */
+            top: 30px; /* Ajustar la separación superior del tooltip */
+            left: -100px; /* Centrar mejor el tooltip relativo al icono */
+            z-index: 10;
         }
 
         ul {
@@ -115,11 +130,21 @@
             document.getElementById('detalles').classList.remove('active');
             document.getElementById('reservas').classList.add('active');
         }
+
+        function showTooltip(element) {
+            var tooltip = element.querySelector('.tooltip-preferences');
+            tooltip.style.display = 'block';
+        }
+
+        function hideTooltip(element) {
+            var tooltip = element.querySelector('.tooltip-preferences');
+            tooltip.style.display = 'none';
+        }
     </script>
 </head>
 <body>
     <div id="reservas" class="container active">
-        <h1>Últimas Reservas</h1>
+        <h1>Reservas de Hotel</h1>
         <table>
             <thead>
                 <tr>
@@ -141,6 +166,17 @@
                     <td class="acciones">
                         <a href="#" title="Notas">&#x1F4DD;</a>
                         <a href="#" title="Más información" onclick="showDetails('Catalonia Albéniz', '15.01.2025', '18.01.2025')">&#x1F50D;</a>
+                        <!-- Icono de Preferencias con tooltip -->
+                        <a href="#" title="Preferencias" onmouseover="showTooltip(this)" onmouseout="hideTooltip(this)">
+                            &#9881;
+                            <div class="tooltip-preferences">
+                                <ul>
+                                    <li>2 Almohadas Extras</li>
+                                    <li>Neceser dental en lavabo</li>
+                                    <li>Luces Apagadas</li>
+                                </ul>
+                            </div>
+                        </a>
                     </td>
                 </tr>
                 <tr>
@@ -152,6 +188,17 @@
                     <td class="acciones">
                         <a href="#" title="Notas">&#x1F4DD;</a>
                         <a href="#" title="Más información" onclick="showDetails('Catalonia Conde de Floridablanca', '02.03.2025', '04.03.2025')">&#x1F50D;</a>
+                        <!-- Icono de Preferencias con tooltip -->
+                        <a href="#" title="Preferencias" onmouseover="showTooltip(this)" onmouseout="hideTooltip(this)">
+                            &#9881;
+                            <div class="tooltip-preferences">
+                                <ul>
+                                    <li>2 Almohadas Extras</li>
+                                    <li>Neceser dental en lavabo</li>
+                                    <li>Luces Apagadas</li>
+                                </ul>
+                            </div>
+                        </a>
                     </td>
                 </tr>
                 <tr>
@@ -164,6 +211,17 @@
                         <a href="#" title="Notas">&#x1F4DD;</a>
                         <a href="#" title="Más información" onclick="showDetails('Catalonia Atocha', '10.03.2025', '13.03.2025', 'Incidencias en proceso')">&#x1F50D;</a>
                         <a href="https://my1000321.de1.demo.crm.cloud.sap/go/detail/case?displayId=9927" title="Incidencias" target="_blank">&#x26A0;</a>
+                        <!-- Icono de Preferencias con tooltip -->
+                        <a href="#" title="Preferencias" onmouseover="showTooltip(this)" onmouseout="hideTooltip(this)">
+                            &#9881;
+                            <div class="tooltip-preferences">
+                                <ul>
+                                    <li>2 Almohadas Extras</li>
+                                    <li>Neceser dental en lavabo</li>
+                                    <li>Luces Apagadas</li>
+                                </ul>
+                            </div>
+                        </a>
                     </td>
                 </tr>
                 <tr>
@@ -175,6 +233,17 @@
                     <td class="acciones">
                         <a href="#" title="Notas">&#x1F4DD;</a>
                         <a href="#" title="Más información" onclick="showDetails('Catalonia Málaga', '08.07.2025', '09.07.2025')">&#x1F50D;</a>
+                        <!-- Icono de Preferencias con tooltip -->
+                        <a href="#" title="Preferencias" onmouseover="showTooltip(this)" onmouseout="hideTooltip(this)">
+                            &#9881;
+                            <div class="tooltip-preferences">
+                                <ul>
+                                    <li>2 Almohadas Extras</li>
+                                    <li>Neceser dental en lavabo</li>
+                                    <li>Luces Apagadas</li>
+                                </ul>
+                            </div>
+                        </a>
                     </td>
                 </tr>
             </tbody>
