@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservas de Hotel - SAP Build Apps Style</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        .container {
+            display: none;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .active {
+            display: block;
+        }
+
+        h1, h2 {
+            color: #005b8f;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 10px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        th {
+            background-color: #005b8f;
+            color: #ffffff;
+        }
+
+        .estado-completado {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .estado-checkin-programado {
+            color: #ffc107;
+            font-weight: bold;
+        }
+
+        .acciones a {
+            margin-right: 10px;
+            text-decoration: none;
+            color: #007bff;
+            cursor: pointer;
+        }
+
+        .acciones a:hover {
+            color: #0056b3;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            padding: 8px 0;
+        }
+
+        .map {
+            margin-top: 20px;
+            width: 100%;
+            height: 300px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        .button-back {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button-back:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script>
+        function showDetails(hotel, desde, hasta, incidencias) {
+            document.getElementById('reservas').classList.remove('active');
+            document.getElementById('detalles').classList.add('active');
+            document.getElementById('detalle-hotel').innerText = 'Hotel: ' + hotel;
+            document.getElementById('detalle-desde').innerText = 'Desde: ' + desde;
+            document.getElementById('detalle-hasta').innerText = 'Hasta: ' + hasta;
+            document.getElementById('incidencias').innerText = incidencias || 'No hay incidencias';
+        }
+
+        function goBack() {
+            document.getElementById('detalles').classList.remove('active');
+            document.getElementById('reservas').classList.add('active');
+        }
+    </script>
+</head>
+<body>
+    <div id="reservas" class="container active">
+        <h1>Últimas Reservas</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Hotel</th>
+                    <th>Desde</th>
+                    <th>Hasta</th>
+                    <th>Tipo Habitación</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Catalonia Albéniz</td>
+                    <td>15.01.2025</td>
+                    <td>18.01.2025</td>
+                    <td>Habitación Superior</td>
+                    <td class="estado-completado">Completada</td>
+                    <td class="acciones">
+                        <a href="#" title="Notas">&#x1F4DD;</a>
+                        <a href="#" title="Más información" onclick="showDetails('Catalonia Albéniz', '15.01.2025', '18.01.2025')">&#x1F50D;</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Catalonia Conde de Floridablanca</td>
+                    <td>02.03.2025</td>
+                    <td>04.03.2025</td>
+                    <td>Habitación Doble</td>
+                    <td class="estado-completado">Completada</td>
+                    <td class="acciones">
+                        <a href="#" title="Notas">&#x1F4DD;</a>
+                        <a href="#" title="Más información" onclick="showDetails('Catalonia Conde de Floridablanca', '02.03.2025', '04.03.2025')">&#x1F50D;</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Catalonia Atocha</td>
+                    <td>10.03.2025</td>
+                    <td>13.03.2025</td>
+                    <td>Habitación Individual</td>
+                    <td class="estado-completado">Completada</td>
+                    <td class="acciones">
+                        <a href="#" title="Notas">&#x1F4DD;</a>
+                        <a href="#" title="Más información" onclick="showDetails('Catalonia Atocha', '10.03.2025', '13.03.2025', 'Incidencias en proceso')">&#x1F50D;</a>
+                        <a href="https://my1000321.de1.demo.crm.cloud.sap/go/detail/case?displayId=9927" title="Incidencias" target="_blank">&#x26A0;</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Catalonia Málaga</td>
+                    <td>08.07.2025</td>
+                    <td>09.07.2025</td>
+                    <td>Habitación Superior</td>
+                    <td class="estado-checkin-programado">Check-In Programado</td>
+                    <td class="acciones">
+                        <a href="#" title="Notas">&#x1F4DD;</a>
+                        <a href="#" title="Más información" onclick="showDetails('Catalonia Málaga', '08.07.2025', '09.07.2025')">&#x1F50D;</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="detalles" class="container">
+        <a href="#" class="button-back" onclick="goBack()">Atrás</a>
+        <h1>Detalles de la Reserva</h1>
+        <h2>Detalles de la Reserva</h2>
+        <ul>
+            <li id="detalle-hotel"></li>
+            <li id="detalle-desde"></li>
+            <li id="detalle-hasta"></li>
+        </ul>
+
+        <h2>Preferencias</h2>
+        <ul>
+            <li>2 Almohadas Extras</li>
+            <li>Neceser dental en lavabo</li>
+            <li>Luces Apagadas</li>
+        </ul>
+
+        <h2>Incidencias</h2>
+        <ul>
+            <li id="incidencias"></li>
+        </ul>
+
+        <h2>Ubicación</h2>
+        <iframe class="map"
+            src="https://www.google.com/maps?q=C/Pacífico,44,Carretera+de+Cádiz,29004+Málaga,+España&output=embed">
+        </iframe>
+    </div>
+</body>
+</html>
