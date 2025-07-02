@@ -52,10 +52,33 @@
             font-size: 1em;
         }
     </style>
+    <script>
+        // Función para obtener parámetros de la URL
+        function getParameterByName(name) {
+            const url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
+            const results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        // Función para personalizar el nombre del usuario
+        function customizeUsername() {
+            const userName = getParameterByName('user');
+            if (userName) {
+                document.getElementById('username').innerText = `Preferencias de ${userName}`;
+            }
+        }
+
+        // Ejecutar la personalización al cargar la página
+        window.onload = customizeUsername;
+    </script>
 </head>
 <body>
     <div class="container">
-        <h1>Preferencias del Usuario</h1>
+        <h1 id="username">Preferencias de Usuario</h1>
         <table>
             <thead>
                 <tr>
@@ -81,9 +104,9 @@
                     <td>Neceser Dental</td>
                     <td>
                         <select>
-                            <option value="none">Sin preferencia seleccionada</option>
+                            <option value="none" selected>Sin preferencia seleccionada</option>
                             <option value="basic">Neceser básico</option>
-                            <option value="premium" selected>Neceser premium</option>
+                            <option value="premium">Neceser premium</option>
                         </select>
                     </td>
                 </tr>
