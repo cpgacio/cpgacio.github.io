@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de la Reserva - Catalonia Málaga</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        h1, h2 {
+            color: #005b8f;
+        }
+
+        ul {
+            padding-left: 0;
+        }
+
+        li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .map {
+            margin-top: 20px;
+            width: 100%;
+            height: 300px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        .incidencia-link {
+            color: #007bff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .incidencia-link:hover {
+            text-decoration: underline;
+            color: #0056b3;
+        }
+
+        .icon-alert {
+            color: #ffcc00;
+            margin-right: 8px;
+        }
+
+        .icon-completed {
+            color: #28a745;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Detalles de la Reserva</h1>
+        <h2>Detalles de la Reserva</h2>
+        <ul>
+            <li>Hotel: Catalonia Málaga</li>
+            <li>Desde: 08.07.2025</li>
+            <li>Hasta: 09.07.2025</li>
+        </ul>
+
+        <h2>Preferencias</h2>
+        <ul>
+            <li><span class="icon-completed">&#x2714;</span>2 Almohadas Extras</li>
+            <li><span class="icon-completed">&#x2714;</span>Neceser dental en lavabo</li>
+            <li><span class="icon-completed">&#x2714;</span>Luces Apagadas</li>
+        </ul>
+
+        <h2>Incidencias</h2>
+        <ul>
+            <li><span class="icon-alert">&#9888;</span><a class="incidencia-link" href="#">Incidencias registradas: problema con la reserva</a></li>
+        </ul>
+
+        <h2>Ubicación</h2>
+        <iframe class="map"
+            src="https://www.google.com/maps?q=C/Pacífico,44,Carretera+de+Cádiz,29004+Málaga,+España&output=embed">
+        </iframe>
+    </div>
+</body>
+</html>
