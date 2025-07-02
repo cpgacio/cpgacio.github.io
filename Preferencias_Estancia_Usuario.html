@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preferencias del Usuario - SAP Build Apps Style</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #005b8f;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        th {
+            background-color: #005b8f;
+            color: #ffffff;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Preferencias del Usuario</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Descripción Preferencia</th>
+                    <th>Preferencia</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Número de Almohadas</td>
+                    <td>
+                        <select>
+                            <option value="none">Sin preferencia seleccionada</option>
+                            <option value="0">0 almohadas</option>
+                            <option value="1">1 almohada</option>
+                            <option value="2" selected>2 almohadas</option>
+                            <option value="3">3 almohadas</option>
+                            <option value="4">4 almohadas</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Neceser Dental</td>
+                    <td>
+                        <select>
+                            <option value="none">Sin preferencia seleccionada</option>
+                            <option value="basic">Neceser básico</option>
+                            <option value="premium" selected>Neceser premium</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Iluminación de la Habitación</td>
+                    <td>
+                        <select>
+                            <option value="none">Sin preferencia seleccionada</option>
+                            <option value="bright">Brillante</option>
+                            <option value="dim">Ténue</option>
+                            <option value="dark" selected>Oscura</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tipo de Colchón</td>
+                    <td>
+                        <select>
+                            <option value="none" selected>Sin preferencia seleccionada</option>
+                            <option value="soft">Suave</option>
+                            <option value="medium">Medio</option>
+                            <option value="firm">Firme</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Temperatura de la Habitación</td>
+                    <td>
+                        <select>
+                            <option value="none" selected>Sin preferencia seleccionada</option>
+                            <option value="cold">Fría</option>
+                            <option value="cool">Fresca</option>
+                            <option value="warm">Cálida</option>
+                            <option value="hot">Caliente</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tipo de Habitación</td>
+                    <td>
+                        <select>
+                            <option value="none" selected>Sin preferencia seleccionada</option>
+                            <option value="seaview">Vistas al mar</option>
+                            <option value="quiet">Lejos del ascensor</option>
+                            <option value="highfloor">Piso alto</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Preferencias de Fumador</td>
+                    <td>
+                        <select>
+                            <option value="none" selected>Sin preferencia seleccionada</option>
+                            <option value="non-smoker">No fumador</option>
+                            <option value="smoker">Fumador</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
