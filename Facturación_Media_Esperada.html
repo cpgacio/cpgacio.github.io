@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Simulación - SAP Build Apps Style</title>
+  <style>
+    /* Estilo inspirado en SAP Build Apps: limpio, tarjetas, espaciado */
+    :root{
+      --bg:#f4f6f8;
+      --card:#ffffff;
+      --primary:#0a74ff;
+      --muted:#6b7280;
+      --success:#16a34a;
+      --shadow: 0 6px 18px rgba(14,30,37,0.08);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    body{
+      margin:0;
+      background:var(--bg);
+      color:#09203b;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:28px;
+    }
+
+    .app-shell{
+      max-width:820px;
+      margin:0 auto;
+    }
+
+    .app-header{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-bottom:18px;
+    }
+    .logo{
+      width:44px;
+      height:44px;
+      border-radius:10px;
+      background:linear-gradient(135deg,var(--primary),#00a3ff);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+      font-weight:700;
+      box-shadow: 0 6px 14px rgba(10,116,255,0.15);
+    }
+    h1{
+      font-size:18px;
+      margin:0;
+    }
+    p.subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:12px;
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+    }
+    @media (min-width:680px){
+      .form-grid{ grid-template-columns: 1fr 1fr; }
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    label{
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .input-group{
+      display:flex;
+      align-items:center;
+      background:#f8fafc;
+      border-radius:10px;
+      padding:10px;
+      gap:8px;
+      border:1px solid rgba(6,10,15,0.04);
+    }
+
+    input[type="number"], input[type="text"]{
+      border:0;
+      outline:none;
+      background:transparent;
+      font-size:16px;
+      width:100%;
+    }
+
+    .prefix{
+      color:var(--muted);
+      font-size:14px;
+      min-width:28px;
+      text-align:left;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      margin-top:8px;
+      align-items:center;
+    }
+
+    button{
+      background:var(--primary);
+      color:#fff;
+      border:0;
+      padding:10px 14px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    button:disabled{
+      opacity:0.6;
+      cursor:not-allowed;
+    }
+
+    .output-row{
+      margin-top:16px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .output{
+      background:#f8fafc;
+      border-radius:10px;
+      padding:12px;
+      min-width:200px;
+      border:1px solid rgba(6,10,15,0.04);
+    }
+
+    .label-small{ color:var(--muted); font-size:13px; margin:0 0 6px 0; }
+    .value-large{ font-size:18px; margin:0; font-weight:700; color:#07203a; }
+
+    /* Clase para marcar el valor calculado en verde */
+    .value-large.calculated { color: var(--success); }
+
+    .score{
+      font-size:20px;
+      font-weight:800;
+      color:var(--success);
+    }
+
+    .note{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:8px;
+    }
+
+    .error{
+      color:#b91c1c;
+      font-size:13px;
+      margin-top:6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="app-header">
+      <div class="logo">S</div>
+      <div>
+        <h1>Estimador - Estilo SAP Build Apps</h1>
+        <p class="subtitle">Introduce los datos para calcular facturación media esperada</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="form-grid">
+        <!-- Servicios Funerarios Esperados (entero) -->
+        <div class="field">
+          <label for="servicios">Servicios Funerarios Esperados</label>
+          <div class="input-group">
+            <input id="servicios" type="number" min="0" step="1" placeholder="Ej. 120" aria-label="Servicios Funerarios Esperados" />
+          </div>
+          <div id="error-servicios" class="error" style="display:none;"></div>
+        </div>
+
+        <!-- Ticket Medio (Euros) -->
+        <div class="field">
+          <label for="ticket">Ticket Medio</label>
+          <div class="input-group">
+            <span class="prefix">€</span>
+            <input id="ticket" type="number" min="0" step="0.01" placeholder="Ej. 1,250.00" aria-label="Ticket Medio" />
+          </div>
+          <div id="error-ticket" class="error" style="display:none;"></div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="calcular">Calcular Facturación</button>
+        <button id="limpiar" style="background:#e6eefc;color:var(--primary);">Limpiar</button>
+        <div style="margin-left:auto" class="note">El campo "Servicios" acepta solo enteros. "Ticket Medio" en €.</div>
+      </div>
+
+      <div class="output-row">
+        <div class="output" style="flex:1; min-width:220px;">
+          <p class="label-small">Facturación Media Esperada</p>
+          <p id="facturacion" class="value-large">—</p>
+        </div>
+
+        <div id="puntuacion-wrap" class="output" style="display:none; align-items:center;">
+          <p class="label-small">Puntuación</p>
+          <p id="puntuacion" class="score">88%</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Referencias
+    const serviciosEl = document.getElementById('servicios');
+    const ticketEl = document.getElementById('ticket');
+    const calcularBtn = document.getElementById('calcular');
+    const limpiarBtn = document.getElementById('limpiar');
+    const facturacionEl = document.getElementById('facturacion');
+    const puntuacionWrap = document.getElementById('puntuacion-wrap');
+    const errorServicios = document.getElementById('error-servicios');
+    const errorTicket = document.getElementById('error-ticket');
+
+    // Formateador EUR (es-ES)
+    const fmtEuro = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' });
+
+    function validateInputs(showErrors = true){
+      // Reset errores
+      errorServicios.style.display = 'none';
+      errorTicket.style.display = 'none';
+
+      let valid = true;
+
+      const sValRaw = serviciosEl.value;
+      const tValRaw = ticketEl.value;
+
+      // Servicios: debe ser número entero >= 0
+      if (sValRaw === '') {
+        if (showErrors) {
+          errorServicios.textContent = 'Introduce un valor para Servicios Funerarios Esperados.';
+          errorServicios.style.display = 'block';
+        }
+        valid = false;
+      } else {
+        const sVal = Number(sValRaw);
+        if (!Number.isFinite(sVal) || isNaN(sVal) || sVal < 0) {
+          errorServicios.textContent = 'El valor debe ser un número entero no negativo.';
+          errorServicios.style.display = 'block';
+          valid = false;
+        } else if (!Number.isInteger(sVal)) {
+          errorServicios.textContent = 'Debe ser un número entero. Puedes redondear al entero más cercano.';
+          errorServicios.style.display = 'block';
+          valid = false;
+        }
+      }
+
+      // Ticket: número >= 0
+      if (tValRaw === '') {
+        if (showErrors) {
+          errorTicket.textContent = 'Introduce un valor para Ticket Medio.';
+          errorTicket.style.display = 'block';
+        }
+        valid = false;
+      } else {
+        const tVal = Number(tValRaw);
+        if (!Number.isFinite(tVal) || isNaN(tVal) || tVal < 0) {
+          errorTicket.textContent = 'El Ticket Medio debe ser un importe (€) positivo o cero.';
+          errorTicket.style.display = 'block';
+          valid = false;
+        }
+      }
+
+      return valid;
+    }
+
+    function calcular(){
+      // Validación estricta y mostrar errores si aplica
+      if (!validateInputs(true)) {
+        facturacionEl.textContent = '—';
+        facturacionEl.classList.remove('calculated');
+        puntuacionWrap.style.display = 'none';
+        return;
+      }
+
+      const s = Number(serviciosEl.value);
+      const t = Number(ticketEl.value);
+
+      const fact = s * t;
+
+      // Formatear en Euros y marcar en verde (clase .calculated)
+      facturacionEl.textContent = fmtEuro.format(fact);
+      facturacionEl.classList.add('calculated');
+
+      // Mostrar Puntuación con 88% en verde
+      puntuacionWrap.style.display = 'flex';
+      document.getElementById('puntuacion').textContent = '88%';
+    }
+
+    calcularBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      calcular();
+    });
+
+    limpiarBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      serviciosEl.value = '';
+      ticketEl.value = '';
+      facturacionEl.textContent = '—';
+      facturacionEl.classList.remove('calculated');
+      puntuacionWrap.style.display = 'none';
+      errorServicios.style.display = 'none';
+      errorTicket.style.display = 'none';
+    });
+
+    // Permitir cálculo con Enter
+    [serviciosEl, ticketEl].forEach(el => {
+      el.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Enter') {
+          ev.preventDefault();
+          calcular();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
