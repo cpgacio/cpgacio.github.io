@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contenido Embebido</title>
+    <style>
+        body {
+            margin: 0;
+        }
+        iframe {
+            width: 100%;
+            height: 100vh;
+            border: none;
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            // Obtener el parámetro de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const parametro = urlParams.get('tanatorio');
+
+            let paginaUrl = '';
+
+            // Comprobar el valor del parámetro y asignar la URL del iframe según corresponda
+            if (parametro === 'Tanatorio Municipal de Torrejón de Ardoz') {
+                paginaUrl = 'https://www.albia.es/w/centros-funerarios/madrid/madrid/instalaciones-albia-tanatorio-crematorio-municipal-de-torrejon-de-ardoz';
+            } else if (parametro === 'Tanatorio Crematorio Municipal de Mostoles') {
+                paginaUrl = 'https://www.albia.es/w/centros-funerarios/madrid/madrid/albia-tanatorio-crematorio-municipal-de-mostoles';
+            } 
+
+            if (paginaUrl) {
+                // Crear el iframe y establecer la URL
+                const iframe = document.createElement('iframe');
+                iframe.src = paginaUrl;
+                document.body.appendChild(iframe);
+            } else {
+                // Indicar al usuario que el parámetro es incorrecto
+                document.body.innerHTML = '<h1>Parámetro no reconocido</h1>';
+            }
+        };
+    </script>
+</head>
+<body>
+    <!-- Aquí se insertará el iframe después de cargar la página -->
+</body>
+</html>
