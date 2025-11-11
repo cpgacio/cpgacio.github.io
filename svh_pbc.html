@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Formulario SAP Build Apps - Formato Compacto</title>
+  <style>
+    body {
+      font-family: "72", "72 Bold", "SAP Sans", Arial, sans-serif;
+      background-color: #f4f6f8;
+      padding: 20px;
+      color: #32363a;
+    }
+    .form-container {
+      background: white;
+      border-radius: 8px;
+      max-width: 900px;
+      margin: auto;
+      padding: 20px 30px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      font-weight: 700;
+      color: #0a6ed1;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #0a6ed1;
+      padding-bottom: 8px;
+    }
+    form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-gap: 24px 20px;
+    }
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 6px;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #c8c8c8;
+      border-radius: 4px;
+      font-size: 14px;
+      font-family: "72", "SAP Sans", Arial, sans-serif;
+      box-sizing: border-box;
+      outline-offset: 2px;
+    }
+    select {
+      cursor: pointer;
+      background: white;
+    }
+    textarea {
+      min-height: 60px;
+      resize: vertical;
+    }
+    button {
+      grid-column: 1 / -1;
+      background-color: #0a6ed1;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 18px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      font-weight: 700;
+      transition: background-color 0.3s ease;
+      justify-self: center;
+      width: 160px;
+    }
+    button:hover {
+      background-color: #084d9c;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Datos de la Operación</h2>
+    <form>
+      <div>
+        <label>Entidad financiera:</label>
+        <input type="text" name="entidad_financiera" />
+      </div>
+
+      <div>
+        <label>Otra entidad financiera:</label>
+        <input type="text" name="otra_entidad_financiera" />
+      </div>
+
+      <div>
+        <label>El cliente accede a la identidad del titular:</label>
+        <select name="cliente_identidad">
+          <option value="">Seleccione</option>
+          <option value="sí">Sí</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+
+      <div>
+        <label>El cliente muestra actitud incoherente:</label>
+        <select name="cliente_actitud">
+          <option value="">Seleccione</option>
+          <option value="sí">Sí</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+
+      <div>
+        <label>¿Se propone el pago a través de intermediario?:</label>
+        <select name="pago_intermediario">
+          <option value="">Seleccione</option>
+          <option value="sí">Sí</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+
+      <div>
+        <label>La sociedad mantiene títulos al portador:</label>
+        <select name="titulos_portador">
+          <option value="">Seleccione</option>
+          <option value="sí">Sí</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+
+      <div>
+        <label>País origen fondos:</label>
+        <input type="text" name="pais_origen_fondos" />
+      </div>
+
+      <div>
+        <label>Finalidad operación:</label>
+        <input type="text" name="finalidad_operacion" />
+      </div>
+
+      <div>
+        <label>Otra finalidad operación:</label>
+        <input type="text" name="otra_finalidad" />
+      </div>
+
+      <div>
+        <label>Método compra:</label>
+        <input type="text" name="metodo_compra" />
+      </div>
+
+      <div>
+        <label>Origen fondos propios (%):</label>
+        <input type="number" name="origen_fondos_propios" min="0" max="100" />
+      </div>
+
+      <div>
+        <label>Origen fondos transacción bancaria (%):</label>
+        <input type="number" name="origen_fondos_bancaria" min="0" max="100" />
+      </div>
+
+      <div>
+        <label>Origen fondos operación:</label>
+        <input type="text" name="origen_fondos_operacion" />
+      </div>
+
+      <div>
+        <label>Preexistencia fondos propios:</label>
+        <input type="text" name="preexistencia_fondos" />
+      </div>
+
+      <div>
+        <label>Otra procedencia fondos propios:</label>
+        <input type="text" name="otra_procedencia_fondos" />
+      </div>
+
+      <div>
+        <label>Operación sospechosa:</label>
+        <select name="operacion_sospechosa">
+          <option value="">Seleccione</option>
+          <option value="sí">Sí</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+
+      <h2 style="grid-column: 1 / -1;">Riesgos y Sanciones</h2>
+
+      <div>
+        <label>Sanción PBC Servicer:</label>
+        <input type="text" name="sancion_pbc_servicer" />
+      </div>
+
+      <div>
+        <label>Fecha sanción PBC Servicer:</label>
+        <input type="date" name="fecha_sancion_pbc_servicer" />
+      </div>
+
+      <div>
+        <label>Informe PBC Servicer:</label>
+        <textarea name="informe_pbc_servicer"></textarea>
+      </div>
+
+      <div>
+        <label>Nivel de riesgo PBC:</label>
+        <input type="text" name="nivel_riesgo_pbc" />
+      </div>
+
+      <div>
+        <label>Fecha nivel de riesgo PBC:</label>
+        <input type="date" name="fecha_nivel_riesgo_pbc" />
+      </div>
+
+      <div>
+        <label>Seguimiento información:</label>
+        <textarea name="seguimiento_informacion"></textarea>
+      </div>
+
+      <div>
+        <label>Última sanción PBC BC:</label>
+        <input type="text" name="ultima_sancion_pbc_rc" />
+      </div>
+
+      <div>
+        <label>Fecha última sanción PBC BC:</label>
+        <input type="date" name="fecha_ultima_sancion_pbc_rc" />
+      </div>
+
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+</body>
+</html>
