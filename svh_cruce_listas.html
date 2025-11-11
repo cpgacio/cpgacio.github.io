@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Tabla estilo SAP S/4HANA - Fiori</title>
+  <style>
+    body {
+      font-family: "72", Arial, Helvetica, sans-serif;
+      background-color: #f8f8f8;
+      padding: 30px;
+      margin: 0;
+    }
+    button {
+      background-color: #0a6ed1;
+      border: none;
+      color: white;
+      padding: 0.6rem 1.6rem;
+      font-size: 1rem;
+      border-radius: 0.3rem;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+      margin-bottom: 20px;
+    }
+    button:hover {
+      background-color: #095bb5;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 1140px;
+      background: white;
+      border-radius: 0.3rem;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+      overflow: hidden;
+      font-size: 0.875rem;
+    }
+    thead {
+      background-color: #f3f6f9;
+    }
+    thead th {
+      color: #0a6ed1;
+      font-weight: 700;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #cfd8dc;
+    }
+    tbody tr {
+      border-bottom: 1px solid #ddd;
+    }
+    tbody tr:nth-child(even) {
+      background-color: #f8fafb;
+    }
+    tbody td {
+      padding: 0.7rem 1rem;
+      color: #3a3a3a;
+    }
+    #loader {
+      display: none;
+      font-size: 1.2rem;
+      max-width: 1140px;
+      background: white;
+      border-radius: 0.3rem;
+      padding: 20px;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+      color: #0a6ed1;
+      text-align: center;
+    }
+    /* Simple spinner animation */
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #0a6ed1;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+<button onclick="showTable()">Obtener cruce de listas</button>
+
+<div id="loader"><span class="spinner"></span>Obteniendo...</div>
+
+<table id="tablaS4" style="display:none;">
+  <thead>
+    <tr>
+      <th>ID Interviniente</th>
+      <th>Tipo interviniente</th>
+      <th>Nombre completo</th>
+      <th>NIF</th>
+      <th>Fecha/Hora Screening</th>
+      <th>Sistema Screening</th>
+      <th>Lista Screening</th>
+      <th>Comentario Sanción</th>
+      <th>Resultado Screening</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>14006133</td>
+      <td>1001 - Titular</td>
+      <td>ANGELA GALVEZ BLASCO</td>
+      <td>86819475H</td>
+      <td>06.05.2021 15:05</td>
+      <td>01 - AMLCheck</td>
+      <td>NO ESTÁ EN LISTA (SCR)</td>
+      <td></td>
+      <td>009 - Negativo</td>
+    </tr>
+    <tr>
+      <td>14004979</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>22.01.2021 13:51</td>
+      <td>01 - AMLCheck</td>
+      <td>NO ESTÁ EN LISTA (SCR)</td>
+      <td></td>
+      <td>009 - Negativo</td>
+    </tr>
+    <tr>
+      <td>14004979</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>16.03.2021 15:30</td>
+      <td>01 - AMLCheck</td>
+      <td>NO ESTÁ EN LISTA (SCR)</td>
+      <td></td>
+      <td>009 - Negativo</td>
+    </tr>
+    <tr>
+      <td>14006133</td>
+      <td>1001 - Titular</td>
+      <td>ANGELA GALVEZ BLASCO</td>
+      <td>86819475H</td>
+      <td>07.05.2021 08:03</td>
+      <td>01 - AMLCheck</td>
+      <td>NO ESTÁ EN LISTA (SCR)</td>
+      <td></td>
+      <td>009 - Negativo</td>
+    </tr>
+  </tbody>
+</table>
+
+<script>
+  function showTable() {
+    document.getElementById('tablaS4').style.display = 'none';
+    document.getElementById('loader').style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('loader').style.display = 'none';
+      document.getElementById('tablaS4').style.display = 'table';
+    }, 1500);
+  }
+</script>
+
+</body>
+</html>
