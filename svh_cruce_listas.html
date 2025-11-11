@@ -2,13 +2,15 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <title>Tabla estilo SAP S/4HANA - Fiori</title>
+  <title>Tabla estilo SAP S/4HANA - Fiori Responsive</title>
   <style>
     body {
       font-family: "72", Arial, Helvetica, sans-serif;
       background-color: #f8f8f8;
-      padding: 30px;
+      padding: 30px 0;
       margin: 0;
+      width: 100vw;
+      min-height: 100vh;
     }
     button {
       background-color: #0a6ed1;
@@ -19,20 +21,62 @@
       border-radius: 0.3rem;
       cursor: pointer;
       transition: background-color 0.2s ease-in-out;
-      margin-bottom: 20px;
+      margin: 32px auto 24px auto;
+      display: block;
     }
     button:hover {
       background-color: #095bb5;
     }
+    #loader {
+      display: none;
+      font-size: 1.2rem;
+      max-width: 1140px;
+      background: white;
+      border-radius: 0.3rem;
+      padding: 20px;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+      color: #0a6ed1;
+      text-align: center;
+      margin: 0 auto 20px auto;
+      justify-content: center;
+      align-items: center;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #0a6ed1;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .table-wrapper {
+      width: 100vw;
+      max-width: 100vw;
+      margin: 0 auto;
+      padding: 0 8px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
     table {
       border-collapse: collapse;
       width: 100%;
+      min-width: 320px;
       max-width: 1140px;
       background: white;
       border-radius: 0.3rem;
       box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
-      overflow: hidden;
       font-size: 0.875rem;
+      margin: 0 auto;
+      overflow: hidden;
     }
     thead {
       background-color: #f3f6f9;
@@ -53,33 +97,46 @@
     tbody td {
       padding: 0.7rem 1rem;
       color: #3a3a3a;
+      word-break: break-word;
     }
-    #loader {
-      display: none;
-      font-size: 1.2rem;
-      max-width: 1140px;
-      background: white;
-      border-radius: 0.3rem;
-      padding: 20px;
-      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
-      color: #0a6ed1;
-      text-align: center;
+    @media (max-width: 900px) {
+      table {
+        font-size: 0.8rem;
+      }
+      thead th, tbody td {
+        padding: 0.55rem 0.5rem;
+      }
     }
-    /* Simple spinner animation */
-    .spinner {
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #0a6ed1;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      animation: spin 1s linear infinite;
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 10px;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    @media (max-width: 600px) {
+      .table-wrapper {
+        padding: 0 2px;
+      }
+      table, thead, tbody, th, td, tr {
+        display: block;
+        width: 100%;
+      }
+      thead {
+        display: none;
+      }
+      tbody tr {
+        margin-bottom: 16px;
+        border-radius: 0.3rem;
+        box-shadow: 0 2px 6px rgb(0 0 0 / 0.07);
+        background-color: #fff !important;
+      }
+      tbody td {
+        text-align: left;
+        padding: 0.65rem 0.45rem;
+        border-bottom: 1px solid #ddd;
+        position: relative;
+      }
+      tbody td:before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: #0a6ed1;
+        display: block;
+        margin-bottom: 4px;
+      }
     }
   </style>
 </head>
@@ -87,74 +144,75 @@
 
 <button onclick="showTable()">Obtener cruce de listas</button>
 
-<div id="loader"><span class="spinner"></span>Obteniendo...</div>
-
-<table id="tablaS4" style="display:none;">
-  <thead>
-    <tr>
-      <th>ID Interviniente</th>
-      <th>Tipo interviniente</th>
-      <th>Nombre completo</th>
-      <th>NIF</th>
-      <th>Fecha/Hora Screening</th>
-      <th>Sistema Screening</th>
-      <th>Lista Screening</th>
-      <th>Comentario Sanción</th>
-      <th>Resultado Screening</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>14006133</td>
-      <td>1001 - Titular</td>
-      <td>ANGELA GALVEZ BLASCO</td>
-      <td>86819475H</td>
-      <td>06.05.2021 15:05</td>
-      <td>01 - AMLCheck</td>
-      <td>NO ESTÁ EN LISTA (SCR)</td>
-      <td></td>
-      <td>009 - Negativo</td>
-    </tr>
-    <tr>
-      <td>14004979</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>22.01.2021 13:51</td>
-      <td>01 - AMLCheck</td>
-      <td>NO ESTÁ EN LISTA (SCR)</td>
-      <td></td>
-      <td>009 - Negativo</td>
-    </tr>
-    <tr>
-      <td>14004979</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>16.03.2021 15:30</td>
-      <td>01 - AMLCheck</td>
-      <td>NO ESTÁ EN LISTA (SCR)</td>
-      <td></td>
-      <td>009 - Negativo</td>
-    </tr>
-    <tr>
-      <td>14006133</td>
-      <td>1001 - Titular</td>
-      <td>ANGELA GALVEZ BLASCO</td>
-      <td>86819475H</td>
-      <td>07.05.2021 08:03</td>
-      <td>01 - AMLCheck</td>
-      <td>NO ESTÁ EN LISTA (SCR)</td>
-      <td></td>
-      <td>009 - Negativo</td>
-    </tr>
-  </tbody>
-</table>
+<div class="table-wrapper">
+  <div id="loader" style="display:none;"><span class="spinner"></span>Obteniendo...</div>
+  <table id="tablaS4" style="display:none;">
+    <thead>
+      <tr>
+        <th>ID Interviniente</th>
+        <th>Tipo interviniente</th>
+        <th>Nombre completo</th>
+        <th>NIF</th>
+        <th>Fecha/Hora Screening</th>
+        <th>Sistema Screening</th>
+        <th>Lista Screening</th>
+        <th>Comentario Sanción</th>
+        <th>Resultado Screening</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-label="ID Interviniente">14006133</td>
+        <td data-label="Tipo interviniente">1001 - Titular</td>
+        <td data-label="Nombre completo">ANGELA GALVEZ BLASCO</td>
+        <td data-label="NIF">86819475H</td>
+        <td data-label="Fecha/Hora Screening">06.05.2021 15:05</td>
+        <td data-label="Sistema Screening">01 - AMLCheck</td>
+        <td data-label="Lista Screening">NO ESTÁ EN LISTA (SCR)</td>
+        <td data-label="Comentario Sanción"></td>
+        <td data-label="Resultado Screening">009 - Negativo</td>
+      </tr>
+      <tr>
+        <td data-label="ID Interviniente">14004979</td>
+        <td data-label="Tipo interviniente"></td>
+        <td data-label="Nombre completo"></td>
+        <td data-label="NIF"></td>
+        <td data-label="Fecha/Hora Screening">22.01.2021 13:51</td>
+        <td data-label="Sistema Screening">01 - AMLCheck</td>
+        <td data-label="Lista Screening">NO ESTÁ EN LISTA (SCR)</td>
+        <td data-label="Comentario Sanción"></td>
+        <td data-label="Resultado Screening">009 - Negativo</td>
+      </tr>
+      <tr>
+        <td data-label="ID Interviniente">14004979</td>
+        <td data-label="Tipo interviniente"></td>
+        <td data-label="Nombre completo"></td>
+        <td data-label="NIF"></td>
+        <td data-label="Fecha/Hora Screening">16.03.2021 15:30</td>
+        <td data-label="Sistema Screening">01 - AMLCheck</td>
+        <td data-label="Lista Screening">NO ESTÁ EN LISTA (SCR)</td>
+        <td data-label="Comentario Sanción"></td>
+        <td data-label="Resultado Screening">009 - Negativo</td>
+      </tr>
+      <tr>
+        <td data-label="ID Interviniente">14006133</td>
+        <td data-label="Tipo interviniente">1001 - Titular</td>
+        <td data-label="Nombre completo">ANGELA GALVEZ BLASCO</td>
+        <td data-label="NIF">86819475H</td>
+        <td data-label="Fecha/Hora Screening">07.05.2021 08:03</td>
+        <td data-label="Sistema Screening">01 - AMLCheck</td>
+        <td data-label="Lista Screening">NO ESTÁ EN LISTA (SCR)</td>
+        <td data-label="Comentario Sanción"></td>
+        <td data-label="Resultado Screening">009 - Negativo</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <script>
   function showTable() {
     document.getElementById('tablaS4').style.display = 'none';
-    document.getElementById('loader').style.display = 'block';
+    document.getElementById('loader').style.display = 'flex';
     setTimeout(() => {
       document.getElementById('loader').style.display = 'none';
       document.getElementById('tablaS4').style.display = 'table';
