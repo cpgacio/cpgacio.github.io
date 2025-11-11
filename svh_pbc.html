@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Formulario SAP Build Apps - Formato Compacto</title>
+  <title>Formulario SAP Build Apps - Memoria y Éxito</title>
   <style>
     body {
       font-family: "72", "72 Bold", "SAP Sans", Arial, sans-serif;
@@ -28,7 +28,7 @@
     }
     form {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       grid-gap: 24px 20px;
     }
     label {
@@ -76,12 +76,31 @@
     button:hover {
       background-color: #084d9c;
     }
+    #successMsg {
+      grid-column: 1 / -1;
+      color: #0a6ed1;
+      font-weight: 700;
+      font-size: 16px;
+      text-align: center;
+      margin-top: 10px;
+      display: none;
+    }
+    @media (max-width: 900px) {
+      form {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 600px) {
+      form {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="form-container">
     <h2>Datos de la Operación</h2>
-    <form>
+    <form id="myForm">
       <div>
         <label>Entidad financiera:</label>
         <input type="text" name="entidad_financiera" />
@@ -225,7 +244,49 @@
       </div>
 
       <button type="submit">Enviar</button>
+      <div id="successMsg">¡Datos enviados con éxito!</div>
     </form>
   </div>
+
+  <script>
+    const form = document.getElementById('myForm');
+    const successMsg = document.getElementById('successMsg');
+
+    // Carga los datos guardados al iniciar
+    window.addEventListener('load', () => {
+      for (const element of form.elements) {
+        if (element.name) {
+          const savedValue = localStorage.getItem(element.name);
+          if (savedValue) {
+            if (element.type === 'checkbox' || element.type === 'radio') {
+              element.checked = savedValue === 'true';
+            } else {
+              element.value = savedValue;
+            }
+          }
+        }
+      }
+    });
+
+    // Guarda los datos al cambiar algún campo
+    form.addEventListener('input', (e) => {
+      const target = e.target;
+      if (target.name) {
+        if (target.type === 'checkbox' || target.type === 'radio') {
+          localStorage.setItem(target.name, target.checked);
+        } else {
+          localStorage.setItem(target.name, target.value);
+        }
+      }
+    });
+
+    // Al enviar el formulario, evita recarga y muestra mensaje éxito
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      successMsg.style.display = 'block';
+      // Opcional: limpiar el localStorage si quieres
+      // localStorage.clear();
+    });
+  </script>
 </body>
 </html>
