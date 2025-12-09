@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Disponibilidad de stock por almacén</title>
+
+    <script id="sap-ui-bootstrap"
+            src="https://sdk.openui5.org/resources/sap-ui-core.js"
+            data-sap-ui-theme="sap_fiori_3"
+            data-sap-ui-libs="sap.m,sap.ui.layout"
+            data-sap-ui-compatversion="edge"
+            data-sap-ui-preload="async"></script>
+
+    <script>
+        sap.ui.getCore().attachInit(function () {
+            sap.ui.require([
+                "sap/m/Input",
+                "sap/m/Button",
+                "sap/m/Table",
+                "sap/m/Column",
+                "sap/m/Label",
+                "sap/m/Text",
+                "sap/m/ColumnListItem",
+                "sap/m/Page",
+                "sap/m/App",
+                "sap/m/VBox",
+                "sap/m/HBox",
+                "sap/ui/model/json/JSONModel"
+            ], function (Input, Button, Table, Column, Label, Text, ColumnListItem, Page, App, VBox, HBox, JSONModel) {
+
+                function generateRandomInteger(min, max) {
+                    return Math.floor(Math.random() * (max - min + 1)) + min;
+                }
+
+                function generateRandomFutureDate(minDays, maxDays) {
+                    const today = new Date();
+                    const minDate = new Date(today);
+                    const maxDate = new Date(today);
+                    minDate.setDate(today.getDate() + minDays);
+                    maxDate.setDate(today.getDate() + maxDays);
+
+                    const randomDate = new Date(
+                        minDate.getTime() +
+                        Math.random() * (maxDate.getTime() - minDate.getTime())
+                    );
+                    return randomDate.toISOString().slice(0, 10); // YYYY-MM-DD
+                }
+
+                function generateTable() {
+                    const warehouses = ["Almacén 1", "Almacén 2", "Almacén 3"];
+                    let data = [];
+
+                    warehouses.forEach(function (warehouse) {
+                        const noItems = Math.random() > 0.2 ? generateRandomInteger(1, 999) : 0;
+                        const atp = noItems === 0 ? "" : generateRandomFutureDate(2, 10);
+
+                        data.push({
+                            warehouse: warehouse,
+                            noItems: noItems,
+                            atp: atp
+                        });
+                    });
+
+                    data.sort(function (a, b) {
+                        if (a.noItems === 0) return 1;
+                        if (b.noItems === 0) return -1;
+                        return new Date(a.atp) - new Date(b.atp);
+                    });
+
+                    return data;
+                }
+
+                // Campo referencia (fijo)
+                const oInput = new Input({
+                    value: "MRM11111",
+                    editable: false,
+                    width: "100%"
+                });
+
+                // “Precio de lista” como input tipo texto, estilo campo SAP
+                const oPriceInput = new Input({
+                    value: "195,00 €",
+                    editable: false,
+                    width: "100%"
+                });
+
+                // Fila de formulario: Referencia + Precio de lista
+                const oReferenceBox = new VBox({
+                    items: [
+                        new Label({ text: "Referencia seleccionada:", labelFor: oInput }),
+                        oInput
+                    ],
+                    width: "50%"
+                });
+
+                const oPriceBox = new VBox({
+                    items: [
+                        new Label({ text: "Precio de lista:", labelFor: oPriceInput }),
+                        oPriceInput
+                    ],
+                    width: "50%"
+                });
+
+                const oHeaderFormRow = new HBox({
+                    items: [oReferenceBox, oPriceBox],
+                    width: "100%",
+                    justifyContent: "SpaceBetween"
+                });
+
+                const oButton = new Button({
+                    text: "Obtener stock",
+                    type: "Emphasized",
+                    press: function () {
+                        const data = generateTable();
+                        const oTableModel = new JSONModel();
+                        oTableModel.setData({ warehouses: data });
+                        oTable.setModel(oTableModel);
+                    }
+                });
+
+                const oTable = new Table({
+                    inset: false,
+                    columns: [
+                        new Column({
+                            header: new Label({ text: "Almacén" })
+                        }),
+                        new Column({
+                            header: new Label({ text: "N.º unidades" })
+                        }),
+                        new Column({
+                            header: new Label({ text: "Fecha ATP" })
+                        })
+                    ]
+                });
+
+                const oTemplate = new ColumnListItem({
+                    cells: [
+                        new Text({ text: "{warehouse}" }),
+                        new Text({ text: "{noItems}" }),
+                        new Text({ text: "{atp}" })
+                    ]
+                });
+
+                oTable.bindItems("/warehouses", oTemplate);
+
+                const oVBox = new VBox({
+                    items: [
+                        oHeaderFormRow,
+                        oButton,
+                        oTable
+                    ],
+                    width: "100%",
+                    alignItems: "Stretch",
+                    justifyContent: "Start"
+                });
+
+                const oPage = new Page({
+                    title: "Disponibilidad de stock por almacén",
+                    content: [oVBox]
+                });
+
+                const oApp = new App({
+                    pages: [oPage]
+                });
+
+                oApp.placeAt("content");
+            });
+        });
+    </script>
+
+    <style>
+        html, body, #content {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: "72", sans-serif;
+        }
+    </style>
+</head>
+<body class="sapUiBody" id="content">
+</body>
+</html>
