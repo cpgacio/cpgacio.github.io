@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Consulta DGT - SAP Style</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Estilos básicos inspirados en SAP Fiori / SAP Build Apps -->
+  <style>
+    :root {
+      --sap-primary: #0a6ed1;
+      --sap-primary-hover: #0854a0;
+      --sap-page-bg: #f5f6f7;
+      --sap-card-bg: #ffffff;
+      --sap-border: #d9d9d9;
+      --sap-text-main: #32363a;
+      --sap-text-secondary: #6a6d70;
+      --sap-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1);
+      --sap-radius: 0.5rem;
+      --sap-font: "72", "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--sap-font);
+      background-color: var(--sap-page-bg);
+      color: var(--sap-text-main);
+      line-height: 1.4;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-header {
+      background-color: var(--sap-card-bg);
+      border-bottom: 1px solid var(--sap-border);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 0.0625rem 0.25rem rgba(0, 0, 0, 0.05);
+    }
+
+    .app-header-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--sap-text-main);
+    }
+
+    .app-header-subtitle {
+      font-size: 0.8rem;
+      color: var(--sap-text-secondary);
+    }
+
+    .app-content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 1.5rem;
+    }
+
+    .form-card {
+      width: 100%;
+      max-width: 960px;
+      background-color: var(--sap-card-bg);
+      border-radius: var(--sap-radius);
+      box-shadow: var(--sap-shadow);
+      border: 1px solid var(--sap-border);
+      padding: 1.5rem;
+    }
+
+    .form-card-header {
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--sap-border);
+      padding-bottom: 0.75rem;
+    }
+
+    .form-card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .form-card-description {
+      font-size: 0.85rem;
+      color: var(--sap-text-secondary);
+    }
+
+    .form-frame-wrapper {
+      margin-top: 1rem;
+      border-radius: var(--sap-radius);
+      overflow: hidden;
+      border: 1px solid var(--sap-border);
+      background-color: #fafafa;
+    }
+
+    .form-frame {
+      width: 100%;
+      min-height: 680px; /* ajusta según la altura real del formulario */
+      border: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .app-content {
+        padding: 1rem;
+      }
+      .form-card {
+        padding: 1rem;
+      }
+      .form-frame {
+        min-height: 780px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-shell">
+    <!-- Header estilo Fiori / Build Apps -->
+    <header class="app-header">
+      <div>
+        <div class="app-header-title">Portal de Consulta</div>
+        <div class="app-header-subtitle">Integrado en aplicación estilo SAP Build Apps</div>
+      </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <main class="app-content">
+      <section class="form-card" aria-label="Formulario de consulta DGT">
+        <div class="form-card-header">
+          <h1 class="form-card-title">Consulta de información</h1>
+          <p class="form-card-description">
+            Completa y envía el formulario embebido a continuación. El contenido se sirve desde el portal externo
+            y se muestra en esta aplicación con un diseño alineado a SAP Build Apps.
+          </p>
+        </div>
+
+        <div class="form-frame-wrapper">
+          <!-- IFRAME con el formulario embebido -->
+          <iframe
+            class="form-frame"
+            src="https://portal.informedgt.com/consultar/#formulario"
+            title="Formulario de consulta DGT"
+            loading="lazy"
+          ></iframe>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
