@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Account Overview — Identification / D&B / PCR (replica)</title>
+<style>
+:root{
+–bg:#f4f6f8;
+–card:#ffffff;
+–muted:#7b8791;
+–accent:#0b6bf2;
+–border:#e6e9ee;
+–radius:8px;
+–shadow: 0 2px 6px rgba(11,20,40,0.04);
+font-family: "72", "72full", "Arial", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+color:#0b2540;
+}
+
+html,body{height:100%;margin:0;background:var(--bg);}
+.page {
+  max-width:1280px;
+  margin:20px auto;
+  padding:18px;
+  box-sizing:border-box;
+}
+
+/* two-column layout similar to screenshot */
+.layout {
+  display:grid;
+  grid-template-columns: 1fr 380px;
+  gap:18px;
+  align-items:start;
+}
+@media (max-width:980px) {
+  .layout { grid-template-columns: 1fr; }
+}
+
+.card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:14px;
+}
+
+.card-title {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:14px;
+  font-weight:600;
+  color:#0b2540;
+  margin-bottom:10px;
+}
+.card-sub { font-size:13px; color:var(--muted); margin-bottom:10px; }
+
+/* Identification Numbers table */
+.id-table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+  background:transparent;
+}
+.id-table thead th {
+  text-align:left;
+  padding:10px 12px;
+  background:#fbfcfd;
+  color:var(--muted);
+  border-bottom:1px solid var(--border);
+  font-weight:600;
+  font-size:13px;
+}
+.id-table tbody td {
+  padding:12px;
+  border-bottom:1px solid #f1f3f5;
+  vertical-align:middle;
+}
+.id-row { background: linear-gradient(180deg, #fff, #fbfcfd); }
+.id-row:hover { background:#f8fafc; }
+
+.id-toolbar {
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:flex-end;
+  margin-top:8px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* Account Identification card layout */
+.account-grid {
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:18px;
+  margin-top:6px;
+}
+.acct-card {
+  background:linear-gradient(180deg, rgba(244,246,248,0.6), rgba(255,255,255,0.4));
+  border:1px solid rgba(11,107,242,0.03);
+  border-radius:6px;
+  padding:14px;
+}
+.acct-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(14,20,30,0.02); }
+.acct-row:last-child { border-bottom: none; }
+.acct-label { color:var(--muted); font-size:13px; }
+.acct-value { font-weight:600; color:#0b2540; font-size:13px; }
+
+/* PCR table */
+.pcr-table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+  margin-top:8px;
+}
+.pcr-table thead th {
+  text-align:left;
+  padding:10px;
+  background:#fbfcfd;
+  color:var(--muted);
+  border-bottom:1px solid var(--border);
+  font-weight:600;
+  font-size:13px;
+}
+.pcr-table tbody td {
+  padding:12px 10px;
+  border-bottom:1px solid #f1f3f5;
+  vertical-align:middle;
+}
+
+/* D&B Linkage right column layout */
+.dnb-grid {
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:8px 22px;
+  align-items:start;
+}
+.dnb-row { padding:8px 0; }
+.dnb-label { display:block; color:var(--muted); font-size:13px; margin-bottom:6px; }
+.dnb-value { font-weight:600; color:#0b2540; font-size:13px; }
+
+/* small helpers */
+.muted { color:var(--muted); font-size:13px; }
+.pill { background:#eef4ff; color:var(--accent); padding:4px 8px; border-radius:999px; font-weight:600; font-size:12px; border:1px solid rgba(11,107,242,0.06); }
+.spacer { height:14px; }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="layout">
+<!-- left column -->
+<div>
+<!-- Identification Numbers -->
+<section class="card" aria-labelledby="ident-heading">
+<div id="ident-heading" class="card-title">
+<!-- small icon replicate -->
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+<rect x="3" y="3" width="18" height="18" rx="3" stroke="#9aa7bb" stroke-width="1.2" fill="rgba(154,167,187,0.03)"/>
+<path d="M7 11h10M7 15h6" stroke="#9aa7bb" stroke-width="1.2" stroke-linecap="round"/>
+</svg>
+Identification Numbers <span class="muted" style="margin-left:8px;font-weight:500;">(2)</span>
+</div>
+
+      <table class="id-table" aria-describedby="id-desc">
+        <thead>
+          <tr>
+            <th>ID Type</th>
+            <th>ID Number</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="id-row">
+            <td>ZTMS01 - TMS ID</td>
+            <td>4000221904</td>
+          </tr>
+          <tr class="id-row">
+            <td>BUP001 - Dun &amp; Bradstreet number</td>
+            <td>216288449</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="id-toolbar" aria-hidden>
+        <div class="muted">Sort</div>
+        <div class="pill">Add</div>
+        <div class="muted">More</div>
+      </div>
+    </section>
+
+    <div class="spacer"></div>
+
+    <!-- Account Identification (card styled white with subtle border like screenshot) -->
+    <section class="card" aria-labelledby="acct-heading">
+      <div id="acct-heading" class="card-title">Account Identification</div>
+
+      <div class="account-grid" role="group" aria-label="Account identification fields">
+        <!-- Left column (stacked) -->
+        <div class="acct-card" style="box-shadow:none;padding:12px;">
+          <div class="acct-row">
+            <div class="acct-label">Account ID</div>
+            <div class="acct-value">1009182</div>
+          </div>
+          <div class="acct-row">
+            <div class="acct-label">External ID</div>
+            <div class="acct-value">216288449</div>
+          </div>
+          <div class="acct-row">
+            <div class="acct-label">PCR Number</div>
+            <div class="acct-value">183991</div>
+          </div>
+          <div class="acct-row">
+            <div class="acct-label">TMS ID Change Log</div>
+            <div class="acct-value">-</div>
+          </div>
+        </div>
+
+        <!-- Right column -->
+        <div class="acct-card" style="box-shadow:none;padding:12px;">
+          <div class="acct-row">
+            <div class="acct-label">D-U-N-S</div>
+            <div class="acct-value">216288449</div>
+          </div>
+          <div class="acct-row">
+            <div class="acct-label">IATA</div>
+            <div class="acct-value">-</div>
+          </div>
+          <div class="acct-row">
+            <div class="acct-label">Entity Name ID</div>
+            <div class="acct-value">-</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="spacer"></div>
+
+    <!-- PCR Level Overview -->
+    <section class="card" aria-labelledby="pcr-heading">
+      <div id="pcr-heading" class="card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <rect x="4" y="5" width="16" height="12" rx="2" stroke="#9aa7bb" stroke-width="1.2" fill="rgba(154,167,187,0.03)"/>
+          <path d="M8 3v4M16 3v4" stroke="#9aa7bb" stroke-width="1.2"/>
+        </svg>
+        PCR Level Overview <span class="muted" style="margin-left:8px;font-weight:500;">(6)</span>
+      </div>
+
+      <table class="pcr-table" aria-label="PCR level table">
+        <thead>
+          <tr>
+            <th>PCR Level</th>
+            <th>Theatre</th>
+            <th>Country</th>
+            <th>Hotel</th>
+            <th>Brand</th>
+            <th>Sub Brand</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>PCR0</td>
+            <td>EMEA</td>
+            <td>United Kingdom</td>
+            <td>The Grand London</td>
+            <td>RD - Radisson</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>PCR0</td>
+            <td>EMEA</td>
+            <td>Germany</td>
+            <td>Munich Central</td>
+            <td>PD - Park Inn</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>PCR0</td>
+            <td>APAC</td>
+            <td>France</td>
+            <td>Paris Montparnasse</td>
+            <td>PZ - Prizeotel</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>PCR0</td>
+            <td>AMERICAS</td>
+            <td>Spain</td>
+            <td>Madrid Sol</td>
+            <td>PK - Park Plaza</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>PCR0</td>
+            <td>EMEA</td>
+            <td>Netherlands</td>
+            <td>Amsterdam Canal</td>
+            <td>RD - Radisson</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>PCR0</td>
+            <td>APAC</td>
+            <td>Poland</td>
+            <td>Warsaw Riverside</td>
+            <td>PD - Park Inn</td>
+            <td>-</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <!-- right column -->
+  <aside>
+    <section class="card" aria-labelledby="dnb-heading" style="min-height:420px;">
+      <div id="dnb-heading" class="card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <circle cx="12" cy="12" r="10" stroke="#9aa7bb" stroke-width="1.2" fill="rgba(154,167,187,0.03)"/>
+          <path d="M8 12h8" stroke="#9aa7bb" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        D&amp;B Linkage
+      </div>
+
+      <div class="muted card-sub">Data from D&amp;B / corporate registry</div>
+
+      <div class="dnb-grid" role="group" aria-label="D&B linkage fields">
+        <div class="dnb-row">
+          <span class="dnb-label">D&amp;B Status</span>
+          <span class="dnb-value">-</span>
+        </div>
+
+        <div class="dnb-row">
+          <span class="dnb-label">Registration Number</span>
+          <span class="dnb-value">-</span>
+        </div>
+
+        <div class="dnb-row">
+          <span class="dnb-label">SIC Code</span>
+          <span class="dnb-value">-</span>
+        </div>
+
+        <div class="dnb-row">
+          <span class="dnb-label">SIC Industry Description</span>
+          <span class="dnb-value">-</span>
+        </div>
+
+        <div class="dnb-row">
+          <span class="dnb-label"># Employee</span>
+          <span class="dnb-value">-</span>
+        </div>
+
+        <div class="dnb-row">
+          <span class="dnb-label">Company Turnover</span>
+          <!-- exact formatting as in screenshot using dots as thousands and comma decimal -->
+          <span class="dnb-value">928.812.913,00 EUR</span>
+        </div>
+
+        <div class="dnb-row">
+          <span class="dnb-label">Global Ultimate - DUNS</span>
+          <span class="dnb-value">-</span>
+        </div>
+
+        <div class="dnb-row">
+          <span class="dnb-label">Global Ultimate - Name</span>
+          <span class="dnb-value">-</span>
+        </div>
+
+        <div class="dnb-row">
+          <span class="dnb-label">Global Ultimate - Country Code</span>
+          <span class="dnb-value">-</span>
+        </div>
+
+        <div class="dnb-row">
+          <span class="dnb-label">Global Ultimate - Country</span>
+          <span class="dnb-value">-</span>
+        </div>
+
+        <div class="dnb-row">
+          <span class="dnb-label">Domestic Ultimate - DUNS</span>
+          <span class="dnb-value">-</span>
+        </div>
+
+        <div class="dnb-row">
+          <span class="dnb-label">Domestic Ultimate - Name</span>
+          <span class="dnb-value">-</span>
+        </div>
+
+        <div class="dnb-row">
+          <span class="dnb-label">Domestic Ultimate - Country Code</span>
+          <span class="dnb-value">-</span>
+        </div>
+
+        <div class="dnb-row">
+          <span class="dnb-label">Domestic Ultimate - Country</span>
+          <span class="dnb-value">-</span>
+        </div>
+
+        <div class="dnb-row">
+          <span class="dnb-label">Immediate Parent - DUNS</span>
+          <span class="dnb-value">-</span>
+        </div>
+
+        <div class="dnb-row">
+          <span class="dnb-label">Immediate Parent - Name</span>
+          <span class="dnb-value">-</span>
+        </div>
+
+        <div class="dnb-row">
+          <span class="dnb-label">Immediate Parent - Country</span>
+          <span class="dnb-value">-</span>
+        </div>
+
+        <div class="dnb-row">
+          <span class="dnb-label">Immediate Parent - Country Code</span>
+          <span class="dnb-value">-</span>
+        </div>
+      </div>
+    </section>
+  </aside>
+</div>
+</div>
+
+<script>
+// No dynamic data required: this HTML replicates the screenshot values exactly.
+// If you want fields to be updatable by an external system, replace innerText
+// of the relevant elements or wire to SAP Build Apps bindings.
+</script>
+</body>
+</html>
