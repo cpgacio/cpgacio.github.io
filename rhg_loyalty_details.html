@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Loyalty Account / Administrator Info - Sample Populated</title>
+  <style>
+    :root{
+      --bg:#f4f6f8;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --accent:#0b6bf2;
+      --border:#e6e9ee;
+      --radius:8px;
+      --shadow: 0 2px 6px rgba(11,20,40,0.04);
+      font-family: "72", "72full", "Arial", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      color:#0b2540;
+    }
+
+    html,body{height:100%;margin:0;background:var(--bg);}
+    .container{
+      max-width:1100px;
+      margin:28px auto;
+      padding:18px;
+      box-sizing:border-box;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:14px 18px;
+      margin-bottom:18px;
+    }
+
+    .card-title{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:14px;
+      font-weight:600;
+      color:#0b2540;
+      margin-bottom:10px;
+    }
+    .card-sub{
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:12px;
+    }
+
+    .loyalty-grid{
+      display:grid;
+      gap:12px;
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (min-width:980px){
+      .loyalty-grid{ grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .field{
+      padding:10px 12px;
+      border-radius:6px;
+      background:linear-gradient(180deg, rgba(244,246,248,0.7), rgba(255,255,255,0.4));
+      border:1px solid rgba(11,107,242,0.03);
+      min-height:48px;
+    }
+    .field-label{
+      display:block;
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+    .field-value{
+      font-size:14px;
+      font-weight:600;
+      color: #0b2540;
+    }
+    .field-value.empty{
+      font-weight:500;
+      font-style:italic;
+      color:var(--muted);
+    }
+
+    .admin-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .meta{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .count-pill{
+      background:#eef4ff;
+      color:var(--accent);
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:600;
+      font-size:13px;
+      border:1px solid rgba(11,107,242,0.08);
+    }
+
+    .table-wrap{
+      border-top:1px solid var(--border);
+      border-radius:6px;
+      overflow:hidden;
+      margin-top:8px;
+      background:transparent;
+    }
+    .table-head{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr 1.4fr 1.2fr;
+      gap:0;
+      padding:10px 14px;
+      background:#fbfcfd;
+      color:var(--muted);
+      font-size:13px;
+      border-bottom:1px solid var(--border);
+      align-items:center;
+    }
+    @media (max-width:720px){
+      .table-head{ grid-template-columns: 1fr 1fr; font-size:12px; }
+    }
+
+    .table-body{
+      min-height:96px;
+      padding:0;
+      color:var(--muted);
+      font-size:14px;
+      background:var(--card);
+    }
+    .table-row{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr 1.4fr 1.2fr;
+      padding:10px 14px;
+      border-bottom:1px solid var(--border);
+      align-items:center;
+      font-size:13px;
+    }
+
+    .empty-state{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:8px;
+      padding:26px 14px;
+      color:var(--muted);
+    }
+    .empty-icon{
+      width:44px;
+      height:44px;
+      display:inline-block;
+      border-radius:6px;
+      background:rgba(154,167,187,0.06);
+      color:#9aa7bb;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:20px;
+    }
+
+    .small{ font-size:12px; color:var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Loyalty Account Details -->
+    <section class="card" aria-labelledby="loyalty-heading">
+      <div id="loyalty-heading" class="card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <circle cx="12" cy="12" r="10" stroke="#0b6bf2" stroke-width="1.4" fill="rgba(11,107,242,0.06)"/>
+          <path d="M8 12h8" stroke="#0b6bf2" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        Loyalty Account Details
+      </div>
+
+      <div class="loyalty-grid" role="list">
+        <div class="field" role="listitem">
+          <span class="field-label">Date of expiry of points</span>
+          <div id="expiryDate" class="field-value empty">-</div>
+        </div>
+
+        <div class="field" role="listitem">
+          <span class="field-label">Radisson Rewards number</span>
+          <div id="radissonNumber" class="field-value empty">-</div>
+        </div>
+
+        <div class="field" role="listitem">
+          <span class="field-label">Current Radisson Rewards point balance</span>
+          <div id="currentBalance" class="field-value empty">-</div>
+        </div>
+
+        <div class="field" role="listitem">
+          <span class="field-label">Last earning date</span>
+          <div id="lastEarning" class="field-value empty">-</div>
+        </div>
+
+        <div class="field" role="listitem">
+          <span class="field-label">Last redemption date</span>
+          <div id="lastRedemption" class="field-value empty">-</div>
+        </div>
+
+        <div class="field" role="listitem">
+          <span class="field-label">RR Enrollment Status</span>
+          <div id="enrollmentStatus" class="field-value empty">-</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Administrator and Booker Information -->
+    <section class="card" aria-labelledby="admin-heading">
+      <div class="admin-header">
+        <div>
+          <div id="admin-heading" class="card-title" style="font-size:13px; margin-bottom:4px;">
+            Administrator and Booker Information
+          </div>
+          <div class="card-sub small">Records coming from external reservation system</div>
+        </div>
+
+        <div class="meta" aria-hidden>
+          <div class="count-pill" id="recordCount">(0)</div>
+        </div>
+      </div>
+
+      <div class="table-wrap" role="table" aria-label="Administrator and booker table">
+        <div class="table-head" role="row">
+          <div role="columnheader">Type</div>
+          <div role="columnheader">First Name</div>
+          <div role="columnheader">Last Name</div>
+          <div role="columnheader">Email</div>
+          <div role="columnheader">Loyalty Card Number</div>
+        </div>
+
+        <div class="table-body" role="rowgroup" id="tableBody">
+          <!-- rows will be inserted here by script -->
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Utility functions to produce plausible random values
+    function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+    function randChoice(arr) { return arr[randInt(0, arr.length - 1)]; }
+
+    function randomFutureDateWithinYears(years) {
+      const now = new Date();
+      const future = new Date();
+      future.setFullYear(now.getFullYear() + randInt(1, Math.max(1, years)));
+      // randomize month/day within that year span
+      future.setMonth(randInt(0, 11));
+      future.setDate(randInt(1, 28));
+      return future;
+    }
+
+    function randomPastDateWithinDays(days) {
+      const now = new Date();
+      const past = new Date();
+      past.setDate(now.getDate() - randInt(1, days));
+      return past;
+    }
+
+    function formatDate(d) {
+      // Friendly format: e.g., 15 Aug 2027
+      const opts = { day: '2-digit', month: 'short', year: 'numeric' };
+      return d.toLocaleDateString('en-GB', opts);
+    }
+
+    function randomRadissonNumber() {
+      // Format: RR-XXXX-XXXX where X are digits
+      const part = () => String(randInt(0, 9999)).padStart(4, '0');
+      return `RR-${part()}-${part()}`;
+    }
+
+    function randomLoyaltyCard() {
+      // 10-digit numeric card with spaces every 4 for display
+      const num = Array.from({length:10}, () => randInt(0,9)).join('');
+      return num.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3');
+    }
+
+    function randomPoints() {
+      // generate a reasonable point balance
+      const points = randInt(0, 50000);
+      return points.toLocaleString() + ' pts';
+    }
+
+    function randomEnrollmentStatus() {
+      return randChoice(['Enrolled', 'Inactive', 'Pending', 'Opted-out', 'Verified']);
+    }
+
+    // Sample name/email pools (fictional)
+    const firstNames = ['Asha', 'Liam', 'Noah', 'Maya', 'Oliver', 'Sofia', 'Ethan', 'Hannah'];
+    const lastNames = ['Peterson', 'Khan', 'Anders', 'Gonzales', 'Lee', 'Smith', 'Müller', 'Moreau'];
+    const domains = ['example.com', 'hotelcorp.test', 'traveldemo.org'];
+
+    function randomEmail(first, last) {
+      const d = randChoice(domains);
+      return `${first.toLowerCase()}.${last.toLowerCase()}@${d}`;
+    }
+
+    // Escape HTML for safe insertion
+    function escapeHtml(str) {
+      if (str === undefined || str === null) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // Populate the loyalty fields with random sensible values
+    function populateLoyaltyWithRandom() {
+      const expiry = randomFutureDateWithinYears(3);
+      const lastEarn = randomPastDateWithinDays(180); // within last 6 months
+      // last redemption might be older or null
+      const lastRedacted = Math.random() < 0.6 ? randomPastDateWithinDays(365) : null;
+
+      const data = {
+        expiryDate: formatDate(expiry),
+        radissonNumber: randomRadissonNumber(),
+        currentBalance: randomPoints(),
+        lastEarning: formatDate(lastEarn),
+        lastRedemption: lastRedacted ? formatDate(lastRedacted) : '-',
+        enrollmentStatus: randomEnrollmentStatus()
+      };
+
+      const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (value === undefined || value === null || value === '') {
+          el.textContent = '-';
+          el.classList.add('empty');
+        } else {
+          el.textContent = value;
+          el.classList.remove('empty');
+        }
+      };
+
+      setText('expiryDate', data.expiryDate);
+      setText('radissonNumber', data.radissonNumber);
+      setText('currentBalance', data.currentBalance);
+      setText('lastEarning', data.lastEarning);
+      setText('lastRedemption', data.lastRedemption);
+      setText('enrollmentStatus', data.enrollmentStatus);
+    }
+
+    // Create a few random administrator/booker records
+    function generateRandomRecords(count) {
+      const types = ['Administrator', 'Booker'];
+      const records = [];
+      for (let i = 0; i < count; i++) {
+        const first = randChoice(firstNames);
+        const last = randChoice(lastNames);
+        records.push({
+          type: randChoice(types),
+          firstName: first,
+          lastName: last,
+          email: randomEmail(first, last),
+          loyaltyNumber: randomLoyaltyCard()
+        });
+      }
+      return records;
+    }
+
+    function populateAdminTableWithRandom() {
+      const container = document.getElementById('tableBody');
+      const countEl = document.getElementById('recordCount');
+      const records = generateRandomRecords(randInt(2, 5)); // produce 2-5 sample rows
+
+      container.innerHTML = '';
+      if (!records.length) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📋</div>
+            <div>No items to show</div>
+            <div class="small">There are currently no administrator or booker records available.</div>
+          </div>
+        `;
+        countEl.textContent = '(0)';
+        return;
+      }
+
+      // Insert rows
+      for (const r of records) {
+        const row = document.createElement('div');
+        row.className = 'table-row';
+        row.innerHTML = `
+          <div>${escapeHtml(r.type)}</div>
+          <div>${escapeHtml(r.firstName)}</div>
+          <div>${escapeHtml(r.lastName)}</div>
+          <div style="color:var(--muted)">${escapeHtml(r.email)}</div>
+          <div>${escapeHtml(r.loyaltyNumber)}</div>
+        `;
+        container.appendChild(row);
+      }
+
+      countEl.textContent = `(${records.length})`;
+    }
+
+    // On load populate with random but sensible sample data
+    document.addEventListener('DOMContentLoaded', function () {
+      populateLoyaltyWithRandom();
+      populateAdminTableWithRandom();
+    });
+  </script>
+</body>
+</html>
