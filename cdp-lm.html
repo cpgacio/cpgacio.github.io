@@ -1,298 +1,383 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAP Customer Data Cloud - Perfil de Cliente</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #f7f9fc;
-            color: #333;
-        }
-        .header {
-            background: linear-gradient(135deg, #0070f3 0%, #00a0e9 100%);
-            color: white;
-            padding: 16px 24px;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .profile-pic {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            margin-right: 16px;
-            background: rgba(255,255,255,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: bold;
-        }
-        .profile-info h1 {
-            font-size: 24px;
-            margin-bottom: 4px;
-        }
-        .profile-info p {
-            opacity: 0.9;
-            font-size: 14px;
-        }
-        .tabs {
-            display: flex;
-            background: white;
-            border-bottom: 1px solid #e0e6ed;
-            overflow-x: auto;
-        }
-        .tab {
-            padding: 16px 24px;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-            white-space: nowrap;
-            font-weight: 500;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .tab.active {
-            color: #0070f3;
-            border-bottom-color: #0070f3;
-        }
-        .tab:hover {
-            background: #f8faff;
-        }
-        .tab-content {
-            display: none;
-            padding: 24px;
-            min-height: 600px;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 24px;
-        }
-        .metric-card {
-            background: white;
-            border-radius: 8px;
-            padding: 24px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        .metric-number {
-            font-size: 36px;
-            font-weight: bold;
-            color: #0070f3;
-            margin-bottom: 8px;
-        }
-        .metric-label {
-            color: #666;
-            font-size: 14px;
-        }
-        .chart-placeholder {
-            height: 300px;
-            background: linear-gradient(45deg, #f0f8ff 25%, transparent 25%), linear-gradient(-45deg, #f0f8ff 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f0f8ff 75%), linear-gradient(-45deg, transparent 75%, #f0f8ff 75%);
-            background-size: 20px 20px;
-            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            font-size: 14px;
-        }
-        .activities-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 24px;
-        }
-        .activity-card {
-            background: white;
-            border-radius: 8px;
-            padding: 24px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-        }
-        .activity-circle {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            margin: 0 auto 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .engagement { background: #e3f2fd; color: #1976d2; }
-        .profile-updates { background: #fce4ec; color: #c2185b; }
-        .orders { background: #e8f5e8; color: #388e3c; }
-        .list-section {
-            background: white;
-            border-radius: 8px;
-            padding: 24px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-            margin-bottom: 24px;
-        }
-        .list-item {
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-            display: flex;
-            align-items: center;
-        }
-        .list-item:last-child {
-            border-bottom: none;
-        }
-        .details-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-        }
-        .detail-group {
-            background: white;
-            border-radius: 8px;
-            padding: 24px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-        }
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        .detail-row:last-child {
-            border-bottom: none;
-        }
-        .label {
-            color: #666;
-            font-size: 14px;
-        }
-        .value {
-            font-weight: 500;
-        }
-        @media (max-width: 1200px) {
-            .dashboard-grid, .activities-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+<meta charset="UTF-8" />
+<title>SAP Customer Data Platform - Customer Profile</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+<style>
+    /* ===== MISMO CSS EXACTO DE ANTES ===== */
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+        font-family: "72", -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+        background:#f4f7fb;
+        color:#32363a;
+    }
+    .shell-header{
+        height:48px;
+        background:#0a6ed1;
+        color:#fff;
+        display:flex;
+        align-items:center;
+        padding:0 16px;
+        font-size:14px;
+    }
+    .shell-logo{
+        width:24px;height:24px;border-radius:4px;
+        background:#fff;margin-right:8px;
+    }
+    .shell-title{font-weight:600;}
+    .page{padding:16px 24px 32px;}
+    .profile-header{
+        display:flex;align-items:flex-start;
+        background:#fff;border-radius:4px 4px 0 0;
+        border:1px solid #dfe3e8;border-bottom:none;
+        padding:16px 24px;
+    }
+    .avatar{
+        width:64px;height:64px;border-radius:50%;
+        background:#d1e8ff;margin-right:16px;
+    }
+    .profile-main{flex:1;}
+    .profile-main-name{
+        font-size:20px;font-weight:600;margin-bottom:4px;
+    }
+    .profile-main-email{
+        font-size:13px;color:#6a6d70;margin-bottom:8px;
+    }
+    .profile-meta{
+        display:flex;flex-wrap:wrap;font-size:12px;
+        color:#6a6d70;gap:16px;
+    }
+    .profile-meta span{white-space:nowrap;}
+    .tabs-bar{
+        display:flex;background:#fff;
+        border:1px solid #dfe3e8;border-top:none;padding:0 24px;
+    }
+    .tab-link{
+        padding:10px 16px;font-size:14px;cursor:pointer;
+        color:#6a6d70;border-bottom:2px solid transparent;
+    }
+    .tab-link.active{
+        color:#0a6ed1;border-bottom-color:#0a6ed1;
+        font-weight:600;
+    }
+    .tab-content{
+        display:none;border:1px solid #dfe3e8;
+        border-top:none;border-radius:0 0 4px 4px;
+        background:#fff;padding:16px 24px 24px;
+    }
+    .tab-content.active{display:block;}
+    .tile-grid-3{
+        display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:16px;margin-bottom:16px;
+    }
+    .tile-grid-2{
+        display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:16px;
+    }
+    .tile{
+        border:1px solid #dfe3e8;border-radius:4px;
+        padding:12px 16px;font-size:12px;
+    }
+    .tile-header{
+        display:flex;justify-content:space-between;
+        align-items:center;margin-bottom:8px;color:#6a6d70;
+    }
+    .tile-value{
+        font-size:20px;font-weight:600;margin-bottom:4px;
+    }
+    .tile-sub{font-size:11px;color:#6a6d70;}
+    .chart-container{
+        position:relative;height:160px;width:100%;
+        margin-top:8px;
+    }
+    .kpi-row{display:flex;gap:16px;margin-bottom:16px;}
+    .kpi-card{
+        flex:1;border:1px solid #dfe3e8;
+        border-radius:4px;padding:12px 16px;font-size:12px;
+    }
+    .kpi-circle{
+        width:48px;height:48px;border-radius:50%;
+        border:4px solid #0a6ed1;display:flex;
+        align-items:center;justify-content:center;
+        font-weight:600;margin-bottom:8px;font-size:14px;
+    }
+    .timeline{
+        border:1px solid #dfe3e8;border-radius:4px;
+        padding:12px 16px;font-size:12px;
+    }
+    .timeline-item{
+        display:flex;justify-content:space-between;
+        padding:4px 0;border-bottom:1px solid #edf0f4;
+    }
+    .timeline-item:last-child{border-bottom:none;}
+    .details-grid{
+        display:grid;grid-template-columns:2fr 1.5fr 1.5fr;gap:16px;
+    }
+    .details-section{
+        border:1px solid #dfe3e8;border-radius:4px;
+        padding:12px 16px;font-size:12px;
+    }
+    .details-title{font-weight:600;margin-bottom:8px;}
+    .attr-row{display:flex;padding:4px 0;border-bottom:1px solid #edf0f4;}
+    .attr-row:last-child{border-bottom:none;}
+    .attr-label{width:45%;color:#6a6d70;}
+    .attr-value{width:55%;}
+    @media(max-width:1024px){
+        .tile-grid-3{grid-template-columns:repeat(2,1fr);}
+        .details-grid{grid-template-columns:1fr;}
+    }
+    @media(max-width:768px){
+        .tile-grid-3,.tile-grid-2{grid-template-columns:1fr;}
+        .profile-header{flex-direction:column;}
+        .avatar{margin-bottom:12px;}
+    }
+</style>
 </head>
 <body>
-    <div class="header">
-        <div class="profile-pic">MW</div>
-        <div class="profile-info">
-            <h1>Mads Wilhelmsen</h1>
-            <p>mads.wilhelmsen@example.com | Última actividad: 19 Mar 2026 10:22</p>
+
+<div class="shell-header">
+    <div class="shell-logo"></div>
+    <div class="shell-title">SAP Customer Data Platform - Customer</div>
+</div>
+
+<div class="page">
+    <!-- Profile Header (igual) -->
+    <div class="profile-header">
+        <div class="avatar"></div>
+        <div class="profile-main">
+            <div class="profile-main-name">Mads Mikkelsen</div>
+            <div class="profile-main-email">ttomarcao88@gmail.com</div>
+            <div class="profile-meta">
+                <span>First Seen: 3/12/2026, 06:13:28 PM</span>
+                <span>Last Seen: 5/3/2026, 09:00:00 AM</span>
+                <span>Master Data ID: None</span>
+                <span>CRM ID: None</span>
+                <span>CIAM ID: 27ef0c1f990...c2e5209</span>
+            </div>
         </div>
     </div>
 
-    <div class="tabs">
-        <div class="tab active" data-tab="overview">Overview</div>
-        <div class="tab" data-tab="activities">Activities</div>
-        <div class="tab" data-tab="details">Details</div>
+    <!-- Tabs (igual) -->
+    <div class="tabs-bar">
+        <div class="tab-link active" data-tab="overview">Overview</div>
+        <div class="tab-link" data-tab="activities">Activities</div>
+        <div class="tab-link" data-tab="details">Details</div>
     </div>
 
+    <!-- ===== OVERVIEW CON GRÁFICOS ===== -->
     <div id="overview" class="tab-content active">
-        <div class="dashboard-grid">
-            <div class="metric-card">
-                <div class="metric-number">12</div>
-                <div class="metric-label">Actividades</div>
+        <div class="tile-grid-3">
+            <div class="tile">
+                <div class="tile-header">
+                    <span>Last Order</span><span>No Data</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="lastOrderChart"></canvas>
+                </div>
             </div>
-            <div class="metric-card">
-                <div class="metric-number">$1,245</div>
-                <div class="metric-label">Gasto total</div>
+            <div class="tile">
+                <div class="tile-header"><span>Total Spend</span></div>
+                <div class="tile-value">$0</div>
+                <div class="tile-sub">No spend recorded</div>
+            </div>
+            <div class="tile">
+                <div class="tile-header">
+                    <span>Total Orders</span><span>Below Average</span>
+                </div>
+                <div class="tile-value">1</div>
+                <div class="tile-sub">61% below average</div>
             </div>
         </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-            <div>
-                <h3 style="margin-bottom: 16px; color: #333;">Distribución de actividades</h3>
-                <div class="chart-placeholder">Gráfico de barras verticales (Engagement 40%, Profile Updates 35%, Orders 25%)</div>
+
+        <div class="tile-grid-2">
+            <div class="tile">
+                <div class="tile-header"><span>Customer Score</span></div>
+                <div class="chart-container">
+                    <canvas id="customerScoreChart"></canvas>
+                </div>
             </div>
-            <div>
-                <h3 style="margin-bottom: 16px; color: #333;">Engagement del cliente</h3>
-                <div class="chart-placeholder">Gráfico de líneas de tiempo de actividad</div>
+            <div class="tile">
+                <div class="tile-header"><span>Orders Over Time</span></div>
+                <div class="chart-container">
+                    <canvas id="ordersTimeChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="tile-grid-2">
+            <div class="tile">
+                <div class="tile-header"><span>Customers Total Spend Distribution</span></div>
+                <div class="chart-container">
+                    <canvas id="spendDistChart"></canvas>
+                </div>
+            </div>
+            <div class="tile">
+                <div class="tile-header"><span>Customers Total Orders Distribution</span></div>
+                <div class="chart-container">
+                    <canvas id="ordersDistChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- ===== ACTIVITIES CON GRÁFICOS ===== -->
     <div id="activities" class="tab-content">
-        <div class="activities-grid">
-            <div class="activity-card">
-                <div class="activity-circle engagement">32</div>
-                <div style="text-align: center;">
-                    <h3 style="margin-bottom: 8px;">Engagement</h3>
-                    <p style="color: #666;">Actividad del cliente</p>
-                </div>
+        <div class="kpi-row">
+            <div class="kpi-card">
+                <div class="tile-header"><span>Engagement</span></div>
+                <div class="kpi-circle">31%</div>
+                <div class="tile-sub">4 engagement events</div>
             </div>
-            <div class="activity-card">
-                <div class="activity-circle profile-updates">35</div>
-                <div style="text-align: center;">
-                    <h3 style="margin-bottom: 8px;">Profile Updates</h3>
-                    <p style="color: #666;">Actualizaciones de perfil</p>
-                </div>
+            <div class="kpi-card">
+                <div class="tile-header"><span>Profile Updates</span></div>
+                <div class="kpi-circle">31%</div>
+                <div class="tile-sub">4 profile updates</div>
             </div>
-            <div class="activity-card">
-                <div class="activity-circle orders">8</div>
-                <div style="text-align: center;">
-                    <h3 style="margin-bottom: 8px;">Orders</h3>
-                    <p style="color: #666;">Órdenes</p>
-                </div>
+            <div class="kpi-card">
+                <div class="tile-header"><span>Orders</span></div>
+                <div class="kpi-circle">8%</div>
+                <div class="tile-sub">1 order</div>
             </div>
         </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-            <div class="list-section">
-                <h3 style="margin-bottom: 16px;">Activity Timeline</h3>
-                <div class="list-item"><span style="color: #0070f3; margin-right: 12px;">●</span>Login - Mar 19, 10:22</div>
-                <div class="list-item"><span style="color: #00c851; margin-right: 12px;">●</span>Order Placed - Mar 18</div>
-                <div class="list-item"><span style="color: #ffbb33; margin-right: 12px;">●</span>Profile Update - Mar 17</div>
+
+        <div class="tile">
+            <div class="tile-header"><span>Customer Engagement</span></div>
+            <div class="chart-container">
+                <canvas id="engagementChart"></canvas>
             </div>
-            <div class="list-section">
-                <h3 style="margin-bottom: 16px;">Indicators</h3>
-                <div>Total Orders: 8</div>
-                <div>Total Spend: $1,245</div>
+        </div>
+
+        <!-- Timelines (igual) -->
+        <div class="tile-grid-2">
+            <div class="timeline">
+                <div class="tile-header"><span>Activity Indicators</span></div>
+                <div class="timeline-item"><span>Registration - Customer</span><span>2 indicators</span></div>
+                <div class="timeline-item"><span>Engagement</span><span>2 indicators</span></div>
+                <div class="timeline-item"><span>Profile Updates</span><span>1 indicator</span></div>
+                <div class="timeline-item"><span>Interest</span><span>1 indicator</span></div>
+            </div>
+            <div class="timeline">
+                <div class="tile-header"><span>Activity Timeline</span></div>
+                <div class="timeline-item"><span>Orders from 5/3/2026</span><span>09:00 AM</span></div>
+                <div class="timeline-item"><span>Interest from 5/3/2026</span><span>09:00 AM</span></div>
+                <div class="timeline-item"><span>Transaction - PoS from 5/2/2026</span><span>09:00 AM</span></div>
             </div>
         </div>
     </div>
 
+    <!-- ===== DETAILS (sin cambios) ===== -->
     <div id="details" class="tab-content">
         <div class="details-grid">
-            <div class="detail-group">
-                <h3 style="margin-bottom: 16px; color: #333;">Account Information</h3>
-                <div class="detail-row"><span class="label">Email:</span><span class="value">mads.wilhelmsen@example.com</span></div>
-                <div class="detail-row"><span class="label">Phone:</span><span class="value">+47 123 45678</span></div>
+            <div class="details-section">
+                <div class="details-title">Attributes</div>
+                <div class="attr-row"><div class="attr-label">Id - Unified</div><div class="attr-value">27ef0c1f990...c2e5209</div></div>
+                <div class="attr-row"><div class="attr-label">Primary Email</div><div class="attr-value">ttomarcao88@gmail.com</div></div>
+                <div class="attr-row"><div class="attr-label">Name - First</div><div class="attr-value">Mads</div></div>
+                <div class="attr-row"><div class="attr-label">Name - Last</div><div class="attr-value">Mikkelsen</div></div>
+                <div class="attr-row"><div class="attr-label">Gender</div><div class="attr-value">M</div></div>
             </div>
-            <div class="detail-group">
-                <h3 style="margin-bottom: 16px; color: #333;">Subscriptions</h3>
-                <div class="detail-row"><span class="label">Newsletter:</span><span class="value">Activo (desde Mar 2025)</span></div>
-                <div class="detail-row"><span class="label">Marketing:</span><span class="value">Activo</span></div>
+            <div class="details-section">
+                <div class="details-title">Indicators (Calculated)</div>
+                <div class="attr-row"><div class="attr-label">Signal Disconnected</div><div class="attr-value">0</div></div>
+                <div class="attr-row"><div class="attr-label">Active Sales Leads</div><div class="attr-value">0</div></div>
+                <div class="attr-row"><div class="attr-label">Average Spend Per Order</div><div class="attr-value">0</div></div>
+                <div class="attr-row"><div class="attr-label">Subscription Interest</div><div class="attr-value">0</div></div>
             </div>
-            <div class="detail-group">
-                <h3 style="margin-bottom: 16px; color: #333;">Segment Membership</h3>
-                <div class="detail-row"><span class="label">VIP Customers:</span><span class="value">Miembro</span></div>
-                <div class="detail-row"><span class="label">High Spenders:</span><span class="value">Miembro</span></div>
+            <div class="details-section">
+                <div class="details-title">Communication Subscriptions</div>
+                <div class="attr-row"><div class="attr-label">offers (EMAIL)</div><div class="attr-value">March 12, 2026</div></div>
+                <div class="attr-row"><div class="attr-label">newsletter (EMAIL)</div><div class="attr-value">March 12, 2026</div></div>
+                <div class="attr-row"><div class="attr-label">notifications.general (EMAIL)</div><div class="attr-value">March 12, 2026</div></div>
             </div>
         </div>
+        <div class="details-section" style="margin-top:16px;">
+            <div class="details-title">Segments Membership</div>
+            <div class="attr-row"><div class="attr-label">Generic: Discount Promotion</div><div class="attr-value">10% (May 3, 2026)</div></div>
+            <div class="attr-row"><div class="attr-label">Generic: Has Email Address</div><div class="attr-value">Yes (March 12, 2026)</div></div>
+            <div class="attr-row"><div class="attr-label">Convert to Registered Customer</div><div class="attr-value">Yes (March 12, 2026)</div></div>
+        </div>
     </div>
+</div>
 
-    <script>
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                tab.classList.add('active');
-                document.getElementById(tab.dataset.tab).classList.add('active');
-            });
+<script>
+    // ===== NAVEGACIÓN TABS =====
+    document.querySelectorAll(".tab-link").forEach(function(tab){
+        tab.addEventListener("click",function(){
+            document.querySelectorAll(".tab-link").forEach(t=>t.classList.remove("active"));
+            document.querySelectorAll(".tab-content").forEach(c=>c.classList.remove("active"));
+            tab.classList.add("active");
+            document.getElementById(tab.dataset.tab).classList.add("active");
         });
-    </script>
+    });
+
+    // ===== GRÁFICOS CHART.JS ESTILO SAP CDP =====
+    function createBarChart(canvasId, labels, data, colors) {
+        const ctx = document.getElementById(canvasId).getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: colors,
+                    borderRadius: 2,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {legend: {display: false}},
+                scales: {
+                    x: {ticks: {font: {size: 10}}},
+                    y: {beginAtZero: true, ticks: {font: {size: 10}}}
+                }
+            }
+        });
+    }
+
+    function createLineChart(canvasId, labels, data) {
+        const ctx = document.getElementById(canvasId).getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    borderColor: '#0a6ed1',
+                    backgroundColor: 'rgba(10,110,209,0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {legend: {display: false}},
+                scales: {
+                    x: {ticks: {font: {size: 10}}},
+                    y: {beginAtZero: true, ticks: {font: {size: 10}}}
+                }
+            }
+        });
+    }
+
+    // Overview Charts
+    createBarChart('lastOrderChart', ['Mon', 'Tue', 'Wed'], [0, 0, 0], ['#e0e7ff']);
+    createLineChart('customerScoreChart', ['Jan', 'Feb', 'Mar', 'Apr'], [65, 72, 68, 75]);
+    createLineChart('ordersTimeChart', ['3/12', '3/15', '3/18', '3/20'], [0, 1, 0, 0]);
+
+    // Distribution Charts (pie-like bars)
+    createBarChart('spendDistChart', ['Low', 'Medium', 'High'], [40, 35, 25], ['#4facfe', '#00f2fe', '#43e97b']);
+    createBarChart('ordersDistChart', ['0-5', '6-10', '11+'], [55, 30, 15], ['#fa709a', '#fee140', '#a76ebd']);
+
+    // Activities Chart
+    createBarChart('engagementChart', ['Engagement', 'Updates', 'Orders'], [31, 31, 8], ['#0a6ed1', '#43e97b', '#fa709a']);
+</script>
+
 </body>
 </html>
