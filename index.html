@@ -1,185 +1,576 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="es">
 <head>
-
-    <title>Lista de Incidencias por C.P.</title>
-
-    <style>
-
-        body {
-
-            font-family: Arial, sans-serif;
-
-        }
-
-        table {
-
-            width: 100%;
-
-            border-collapse: collapse;
-
-        }
-
-        th {
-
-            background-color: orange;
-
-            color: white;
-
-            padding: 10px;
-
-        }
-
-        td {
-
-            background-color: #e0e0e0;
-
-            color: blue;
-
-            padding: 10px;
-
-        }
-
-        a {
-
-            color: blue;
-
-            text-decoration: none;
-
-        }
-
-        a:hover {
-
-            text-decoration: underline;
-
-        }
-
-    </style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estado de Pedido - Normon - SAP Service Cloud</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+:root{
+  --brand:#0070F2;--brand-d:#0057CC;
+  --shell:#002A86;--shell2:#00144A;
+  --bg:#F2F3F4;--surface:#FFF;--surface2:#FAFBFC;
+  --border:#D9DBDD;--border-l:#EAECEE;
+  --text:#1D2D3E;--text2:#556B82;--text3:#8095A8;
+  --ok:#107E3E;--ok-bg:#E8F5EE;
+  --warn:#E76500;--warn-bg:#FEF0E0;
+  --info-bg:#E8F2FD;--neutral:#5C6873;--neutral-bg:#EEF0F2;
+  --purple:#5C5C9E;--purple-bg:#F0EFFC;
+  --r:8px;--sh:0 1px 4px rgba(0,0,0,.08),0 0 1px rgba(0,0,0,.06);
+  --f:'Inter','72',sans-serif
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--f);background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+/* Shell */
+.shell{background:var(--shell);height:44px;display:flex;align-items:center;padding:0 24px;gap:0;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,40,.3)}
+.slogo{width:40px;height:20px;background:#fff;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--shell);letter-spacing:.05em;flex-shrink:0;margin-right:16px}
+.sdiv{width:1px;height:22px;background:rgba(255,255,255,.2);margin:0 16px}
+.sapp{font-size:13px;font-weight:600;color:rgba(255,255,255,.9)}
+.ssp{flex:1}
+.sav{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:11px;font-weight:700;color:#fff;border:1.5px solid rgba(255,255,255,.25)}
+.sib{width:32px;height:32px;border-radius:50%;background:transparent;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s;margin-left:4px}
+.sib:hover{background:rgba(255,255,255,.12)}
+.sib svg{width:16px;height:16px;fill:rgba(255,255,255,.85)}
+.sun{font-size:11.5px;color:rgba(255,255,255,.8);margin-left:8px;font-weight:500}
+/* Demo */
+.dbar{background:var(--shell2);padding:8px 24px;display:flex;align-items:center;gap:14px;border-bottom:1px solid rgba(255,255,255,.06)}
+.dlbl{font-size:10px;font-weight:700;letter-spacing:.08em;color:rgba(255,255,255,.4);text-transform:uppercase;white-space:nowrap}
+.dtabs{display:flex;gap:6px}
+.dtab{padding:4px 14px;border-radius:20px;border:1.5px solid rgba(255,255,255,.18);background:transparent;font-size:11px;font-weight:600;font-family:var(--f);cursor:pointer;color:rgba(255,255,255,.6);transition:all .18s}
+.dtab:hover{border-color:rgba(255,255,255,.5);color:#fff}
+.dtab.on{border-color:var(--brand);background:var(--brand);color:#fff}
+.dtab[data-s="R"].on{background:var(--warn);border-color:var(--warn)}
+.dtab[data-s="E"].on{background:var(--ok);border-color:var(--ok)}
+/* Page header */
+.phdr{background:var(--surface);border-bottom:1px solid var(--border-l);padding:0 24px;display:flex;align-items:center;gap:12px;height:56px}
+.bc{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text3);flex-shrink:0}
+.bc a{color:var(--brand);font-weight:500;cursor:pointer;text-decoration:none}
+.bc a:hover{text-decoration:underline}
+.bc-sep{font-size:11px}
+.bc-cur{color:var(--text);font-weight:600}
+.hsp2{width:1px;height:28px;background:var(--border-l);margin:0 4px}
+.htitle{font-size:15px;font-weight:700;color:var(--text)}
+.hbadge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:11.5px;font-weight:700;flex-shrink:0}
+.hbadge .dot{width:7px;height:7px;border-radius:50%}
+.psp{flex:1}
+.hact{display:flex;gap:8px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r);border:none;font-family:var(--f);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .18s;white-space:nowrap}
+.btn svg{width:14px;height:14px;fill:currentColor;flex-shrink:0}
+.btn-p{background:var(--brand);color:#fff}.btn-p:hover{background:var(--brand-d)}
+.btn-s{background:var(--surface);color:var(--brand);border:1.5px solid var(--brand)}.btn-s:hover{background:var(--info-bg)}
+.btn-g{background:var(--surface);color:var(--text2);border:1.5px solid var(--border)}.btn-g:hover{border-color:var(--brand);color:var(--brand)}
+.btn-sm{padding:6px 14px;font-size:11.5px}
+/* Layout */
+.layout{display:grid;grid-template-columns:400px 1fr;min-height:calc(100vh - 108px)}
+.lcol{background:var(--surface2);border-right:1px solid var(--border-l);padding:20px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;height:calc(100vh - 108px);position:sticky;top:108px}
+.rcol{padding:20px;display:flex;flex-direction:column;gap:16px;overflow-y:auto;height:calc(100vh - 108px)}
+/* Cards */
+.card{background:var(--surface);border-radius:var(--r);box-shadow:var(--sh);border:1px solid var(--border-l);overflow:hidden}
+.ch{padding:12px 16px 10px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text2);border-bottom:1px solid var(--border-l);display:flex;align-items:center;gap:6px}
+.ch svg{width:13px;height:13px;fill:var(--brand);flex-shrink:0}
+.chr{margin-left:auto;font-size:9.5px;font-weight:600;color:var(--text3);text-transform:none;letter-spacing:0}
+.cb{padding:14px 16px}
+/* Badges */
+.bp{background:var(--purple-bg);color:var(--purple)}.bp .dot{background:var(--purple)}
+.be{background:var(--info-bg);color:var(--brand)}.be .dot{background:var(--brand)}
+.bt{background:#E5F3FF;color:#0057B8}.bt .dot{background:#0057B8}
+.br{background:var(--warn-bg);color:var(--warn)}.br .dot{background:var(--warn)}
+.bv{background:var(--ok-bg);color:var(--ok)}.bv .dot{background:var(--ok)}
+/* Stepper */
+.sw{padding:16px 16px 8px}
+.srow{display:flex;align-items:flex-start}
+.step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;z-index:1}
+.scon{position:absolute;top:13px;left:calc(-50% + 13px);right:calc(50% + 13px);height:2px;background:var(--border);z-index:0}
+.scon.done{background:var(--brand)}.scon.ok{background:var(--ok)}.scon.wn{background:var(--warn)}
+.sdot{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text3);flex-shrink:0}
+.sdot.done{background:var(--brand);border-color:var(--brand);color:#fff}
+.sdot.act{background:var(--brand);border-color:var(--brand);color:#fff;box-shadow:0 0 0 5px rgba(0,112,242,.14)}
+.sdot.wn{background:var(--warn);border-color:var(--warn);color:#fff;box-shadow:0 0 0 5px rgba(231,101,0,.13)}
+.sdot.ok{background:var(--ok);border-color:var(--ok);color:#fff;box-shadow:0 0 0 5px rgba(16,126,62,.12)}
+.sdot svg{width:12px;height:12px;fill:currentColor}
+.slbl{font-size:10px;font-weight:600;color:var(--text3);margin-top:6px;text-align:center;line-height:1.3;max-width:70px}
+.slbl.act{color:var(--brand);font-weight:700}.slbl.done{color:var(--brand)}
+.slbl.wn{color:var(--warn);font-weight:700}.slbl.ok{color:var(--ok);font-weight:700}
+/* ETA */
+.etastrip{display:flex;border-top:1px solid var(--border-l)}
+.etac{flex:1;padding:10px 16px;text-align:center;border-right:1px solid var(--border-l)}
+.etac:last-child{border-right:none}
+.etal{font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.etav{font-size:13px;font-weight:700}
+/* KV */
+.kv{display:flex;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border-l);gap:10px}
+.kv:last-child{border-bottom:none;padding-bottom:0}
+.kvi{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.kvi svg{width:14px;height:14px}
+.kvr{flex:1}
+.kvk{font-size:9.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.kvv{font-size:13px;font-weight:500;color:var(--text)}
+.kvv.mono{font-family:monospace;font-size:11.5px}
+.kvsub{font-size:11px;color:var(--text3);margin-top:2px}
+/* Alert */
+.alrt{border-radius:4px;padding:10px 12px;display:flex;gap:8px;align-items:flex-start}
+.alrt svg{width:15px;height:15px;flex-shrink:0;margin-top:1px}
+.alrt-t{font-size:11.5px;line-height:1.5;font-weight:500}
+.al-w{background:var(--warn-bg);color:var(--warn)}
+.al-s{background:var(--ok-bg);color:var(--ok)}
+.al-i{background:var(--info-bg);color:var(--brand)}
+/* Docs */
+.di{display:flex;align-items:center;gap:10px;padding:9px 8px;border-bottom:1px solid var(--border-l);cursor:pointer;border-radius:5px;transition:background .15s}
+.di:last-child{border-bottom:none}
+.di:hover{background:var(--info-bg)}
+.dico{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px}
+.dinfo{flex:1}.dname{font-size:12.5px;font-weight:600;color:var(--text)}.dmeta{font-size:10.5px;color:var(--text3);margin-top:1px}
+.dlbtn{width:28px;height:28px;border-radius:5px;border:1.5px solid var(--border);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.dlbtn:hover{border-color:var(--brand);background:var(--info-bg)}
+.dlbtn svg{width:13px;height:13px;fill:var(--brand)}
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh)}
+.kpi-ico{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.kpi-ico svg{width:18px;height:18px}
+.kpi-lbl{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+.kpi-val{font-size:20px;font-weight:700;color:var(--text);line-height:1;letter-spacing:-.02em}
+.kpi-sub{font-size:11px;color:var(--text3);margin-top:4px}
+/* Products table */
+.ptbl{width:100%;border-collapse:collapse}
+.ptbl th{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;padding:9px 14px;border-bottom:2px solid var(--border-l);text-align:left;background:var(--surface2);white-space:nowrap}
+.ptbl td{padding:11px 14px;border-bottom:1px solid var(--border-l);font-size:12.5px;color:var(--text);vertical-align:middle}
+.ptbl tr:last-child td{border-bottom:none}
+.ptbl tbody tr:hover td{background:#F7FBFF}
+.ptbl tfoot td{background:var(--surface2);font-weight:700;border-top:2px solid var(--border-l)}
+.pemo{width:32px;height:32px;border-radius:7px;background:var(--info-bg);display:inline-flex;align-items:center;justify-content:center;font-size:14px;vertical-align:middle;margin-right:10px}
+.pname{font-weight:600}
+.pref{font-size:10.5px;color:var(--text3);margin-top:2px;font-family:monospace}
+.blot{display:inline-block;padding:2px 7px;border-radius:4px;background:var(--neutral-bg);color:var(--neutral);font-size:10px;font-weight:600;font-family:monospace}
+.pqty{font-weight:700;color:var(--brand);background:var(--info-bg);padding:3px 10px;border-radius:5px;display:inline-block}
+/* Timeline */
+.tl{display:flex;flex-direction:column;padding:4px 0}
+.tli{display:flex;gap:14px;padding-bottom:18px}
+.tli:last-child{padding-bottom:0}
+.tll{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:34px}
+.tlic{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.tlic svg{width:16px;height:16px}
+.tline{width:2px;flex:1;background:var(--border-l);margin-top:4px;min-height:18px}
+.tli:last-child .tline{display:none}
+.tlc{flex:1;padding-top:6px}
+.tlt{font-size:13.5px;font-weight:600;color:var(--text)}
+.tld{font-size:12px;color:var(--text2);margin-top:3px;line-height:1.5}
+.tlmeta{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap}
+.tltime{font-size:10.5px;color:var(--text3);font-weight:500;display:flex;align-items:center;gap:4px}
+.tltime svg{width:11px;height:11px;fill:var(--text3)}
+.chip{display:inline-flex;padding:2px 8px;border-radius:9px;font-size:10px;font-weight:700}
+.chip-b{background:var(--info-bg);color:var(--brand)}.chip-g{background:var(--ok-bg);color:var(--ok)}.chip-o{background:var(--warn-bg);color:var(--warn)}
+/* Rating */
+.rrow{display:flex;gap:4px;margin-top:8px}
+.star{background:none;border:none;cursor:pointer;font-size:26px;padding:0;color:#D9DBDD;line-height:1}
+.star.on{color:#F0A500}
+/* Toast */
+.toast{position:fixed;bottom:28px;right:28px;background:#1D2D3E;color:#fff;padding:12px 20px;border-radius:8px;font-size:12.5px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+.toast.show{opacity:1}
+/* Tag */
+.tag{display:inline-flex;padding:2px 8px;border-radius:9px;font-size:10px;font-weight:700}
+.tgb{background:var(--info-bg);color:var(--brand)}
+/* Misc */
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.fu{animation:fadeUp .25s ease forwards}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:#ccd0d5;border-radius:3px}
+</style>
 </head>
-
 <body>
 
-    <h1>Incidencias por Código Postal</h1>
+<!-- SHELL BAR -->
+<div class="shell">
+  <div class="slogo">SAP</div>
+  <div class="sdiv"></div>
+  <span class="sapp">SAP Service Cloud &nbsp;&middot;&nbsp; Portal de Clientes Normon</span>
+  <div class="ssp"></div>
+  <button class="sib" onclick="toast2('Sin notificaciones pendientes')">
+    <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+  </button>
+  <button class="sib" onclick="toast2('Abriendo configuraci&oacute;n...')">
+    <svg viewBox="0 0 24 24"><path d="M12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5zm7.43-2.45c.04-.3.07-.6.07-.92 0-.31-.03-.62-.07-.91l1.96-1.53a.47.47 0 0 0 .11-.59l-1.86-3.21a.47.47 0 0 0-.57-.21l-2.31.93c-.48-.37-.99-.68-1.56-.91l-.35-2.46A.47.47 0 0 0 14.57 3H9.43a.47.47 0 0 0-.46.4l-.35 2.46c-.57.23-1.09.55-1.56.91l-2.31-.93a.45.45 0 0 0-.57.21L2.32 9.26a.46.46 0 0 0 .11.59l1.96 1.53c-.04.29-.07.6-.07.91 0 .31.03.62.07.91l-1.96 1.53a.47.47 0 0 0-.11.59l1.86 3.21c.12.21.36.28.57.21l2.31-.93c.48.37.99.68 1.56.91l.35 2.46c.06.23.27.4.46.4h5.14c.2 0 .4-.17.46-.4l.35-2.46c.57-.23 1.09-.55 1.56-.91l2.31.93c.21.07.45 0 .57-.21l1.86-3.21a.47.47 0 0 0-.11-.59l-1.96-1.52z"/></svg>
+  </button>
+  <div style="width:1px;height:22px;background:rgba(255,255,255,.2);margin:0 10px"></div>
+  <div class="sav">RH</div>
+  <span class="sun">Ricardo</span>
+</div>
 
-    <input id="postalCode" type="text" />
+<!-- DEMO BAR -->
+<div class="dbar">
+  <span class="dlbl">Simular estado</span>
+  <div class="dtabs">
+    <button class="dtab" data-s="P" onclick="go('P')">En Preparaci&oacute;n</button>
+    <button class="dtab" data-s="X" onclick="go('X')">Expedido</button>
+    <button class="dtab on" data-s="T" onclick="go('T')">En Tr&aacute;nsito</button>
+    <button class="dtab" data-s="R" onclick="go('R')">Retrasado</button>
+    <button class="dtab" data-s="E" onclick="go('E')">Entregado</button>
+  </div>
+</div>
 
-    <button onclick="generateIncidents()">Buscar Incidencias</button>
+<!-- PAGE HEADER -->
+<div class="phdr">
+  <div class="bc">
+    <a onclick="toast2('Mis Pedidos...')">Mis Pedidos</a>
+    <span class="bc-sep">&rsaquo;</span>
+    <span class="bc-cur">NRM-2025-048712</span>
+  </div>
+  <div class="hsp2"></div>
+  <span class="htitle">Pedido NRM-2025-048712</span>
+  <div class="hbadge bp" id="hbadge"><span class="dot"></span><span id="hbadge-lbl">En Tr&aacute;nsito</span></div>
+  <div class="psp"></div>
+  <div class="hact">
+    <button class="btn btn-g btn-sm" onclick="toast2('Generando PDF...')">
+      <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+      Exportar PDF
+    </button>
+    <button class="btn btn-s btn-sm" onclick="toast2('Conectando con SAC...')">
+      <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+      Contactar SAC
+    </button>
+    <button class="btn btn-p btn-sm" onclick="toast2('Abriendo incidencia...')">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+      Abrir Incidencia
+    </button>
+  </div>
+</div>
 
-	<br> </br>
+<!-- LAYOUT -->
+<div class="layout">
+  <div class="lcol" id="lcol"></div>
+  <div class="rcol" id="rcol"></div>
+</div>
+<div class="toast" id="toast"></div>
 
-    <table id="incidentTable">
+<script>
+const S={
+  check:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
+  order:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>',
+  box:  '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>',
+  truck:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>',
+  loc:  '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>',
+  hub:  '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 7l-8-5-8 5v10l8 5 8-5V7zm-8 3L6 6.25 12 2.5l6 3.75L12 10zm-7 1.8l6 3.75V20L5 16.25V11.8zm8 3.75l6-3.75v4.45L13 20v-4.45z"/></svg>',
+  warn: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>',
+  agent:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>',
+  sign: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>',
+  doc:  '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>',
+  dl:   '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>',
+  info: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>',
+  usr:  '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>',
+  pin:  '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>',
+  cal:  '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5C3.9 3 3 3.9 3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>',
+  clock:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10S22 17.52 22 12 17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>',
+  euro: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 18.5c-2.51 0-4.68-1.42-5.76-3.5H15v-2H8.58c-.05-.33-.08-.66-.08-1s.03-.67.08-1H15V9H9.24C10.32 6.92 12.5 5.5 15 5.5c1.61 0 3.09.59 4.23 1.57L21 5.3C19.41 3.87 17.3 3 15 3c-3.92 0-7.24 2.51-8.48 6H3v2h3.06c-.04.33-.06.66-.06 1s.02.67.06 1H3v2h3.52c1.24 3.49 4.56 6 8.48 6 2.31 0 4.41-.87 6-2.29l-1.78-1.77C18.09 17.91 16.62 18.5 15 18.5z"/></svg>',
+  pkg:  '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 7l-8-5-8 5v10l8 5 8-5V7zm-8 3L6 6.25 12 2.5l6 3.75L12 10zm-7 1.8l6 3.75V20L5 16.25V11.8zm8 3.75l6-3.75v4.45L13 20v-4.45z"/></svg>',
+  list: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>',
+  hist: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>',
+  cd:   '<svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
+  wd:   '<svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>',
+  tclock:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10S22 17.52 22 12 17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>',
+};
 
-        <tr>
+const PRODS=[
+  {e:'💊',n:'Metformina NORMON 850mg',  r:'MET-850-60',  lot:'MET-2025-0341', d:'60 comprimidos · EFG', q:'4',  u:'Caja',  price:'14,80 €', total:'59,20 €'},
+  {e:'💊',n:'Amoxicilina NORMON 500mg', r:'AMO-500-28',  lot:'AMO-2025-0892', d:'28 cápsulas · EFG',   q:'2',  u:'Caja',  price:'8,45 €',  total:'16,90 €'},
+  {e:'💊',n:'Simvastatina NORMON 40mg', r:'SIM-040-60',  lot:'SIM-2025-1187', d:'60 comprimidos · EFG', q:'6',  u:'Caja',  price:'11,20 €', total:'67,20 €'},
+  {e:'🧴',n:'Colutorio Curasept ADS 220',r:'CUR-220-200',lot:'CUR-2025-0044', d:'200 ml · Solución',   q:'3',  u:'Unidad', price:'9,80 €',  total:'29,40 €'},
+];
 
-            <th>ID Incidencia</th>
+const D={
+P:{lbl:'En Preparación',bc:'bp',si:0,at:'i',am:'Su pedido está siendo preparado en el almacén de Tres Cantos. Le notificaremos en cuanto sea expedido.',
+   el:'Entrega estimada',ev:'26/05/2025',e3:'—',
+   kpi:[{i:'box',  bg:'#F0EFFC',c:'#5C5C9E',l:'Estado',      v:'Picking',     s:'En almacén'},
+        {i:'clock',bg:'#E8F2FD',c:'#0070F2',l:'Inicio prep.', v:'19/05',       s:'09:14h'},
+        {i:'pkg',  bg:'#E8F5EE',c:'#107E3E',l:'Artículos',    v:'15 ud.',      s:'4 referencias'},
+        {i:'euro', bg:'#FEF0E0',c:'#E76500',l:'Importe s/IVA',v:'1.062,70 €',  s:'21% IVA aparte'}],
+   tl:[{i:'order',c:'#5C5C9E',bg:'#F0EFFC',t:'Pedido recibido y confirmado',d:'Sistema SAP Service Cloud registró el pedido automáticamente · Confirmación enviada al cliente',ts:'19/05/2025  09:14',ch:null},
+       {i:'check',c:'#107E3E',bg:'#E8F5EE',t:'Condiciones de pago verificadas',d:'Línea de crédito aprobada · Cliente FAR-08192 activo en SAP ERP · Riesgo crediticio OK',ts:'19/05/2025  09:16',ch:null},
+       {i:'box',  c:'#0070F2',bg:'#E8F2FD',t:'Preparación en curso',d:'Orden de picking generada en almacén Tres Cantos · Operario asignado: J. Rodríguez',ts:'19/05/2025  10:30',ch:'En curso',ct:'b'}]},
+X:{lbl:'Expedido',bc:'be',si:1,at:'i',am:'Su pedido ha salido de las instalaciones de Normon. DHL recogerá el envío en las próximas horas.',
+   el:'Entrega estimada',ev:'26/05/2025',e3:'24–48h',
+   kpi:[{i:'truck',bg:'#E8F2FD',c:'#0070F2',l:'Transportista', v:'DHL',         s:'Express Farma'},
+        {i:'doc',  bg:'#E8F5EE',c:'#107E3E',l:'Albarán',        v:'049017',      s:'ALB-2025-049017'},
+        {i:'pkg',  bg:'#F0EFFC',c:'#5C5C9E',l:'Peso total',     v:'4,2 kg',      s:'15 unidades · 2 bultos'},
+        {i:'euro', bg:'#FEF0E0',c:'#E76500',l:'Importe s/IVA',  v:'1.062,70 €',  s:'21% IVA aparte'}],
+   tl:[{i:'order',c:'#5C5C9E',bg:'#F0EFFC',t:'Pedido recibido y confirmado',d:'Sistema SAP Service Cloud registró el pedido automáticamente',ts:'19/05/2025  09:14',ch:null},
+       {i:'check',c:'#107E3E',bg:'#E8F5EE',t:'Condiciones de pago verificadas',d:'Crédito aprobado · Cliente FAR-08192 activo en SAP ERP',ts:'19/05/2025  09:16',ch:null},
+       {i:'box',  c:'#107E3E',bg:'#E8F5EE',t:'Preparación completada',d:'Picking y embalaje finalizados · 15 unidades · 4,2 kg · Operario: J. Rodríguez',ts:'20/05/2025  08:45',ch:null},
+       {i:'truck',c:'#0070F2',bg:'#E8F2FD',t:'Pedido expedido',d:'Albarán ALB-2025-049017 generado en SAP ERP · Paquete entregado a DHL Express Farma',ts:'20/05/2025  14:22',ch:'Expedido',ct:'b'}]},
+T:{lbl:'En Tránsito',bc:'bt',si:2,at:'i',am:'Su pedido está en camino. DHL Express lo entregará en C/ Gràcia, 142 — Barcelona antes del 26/05/2025.',
+   el:'Entrega estimada',ev:'26/05/2025',e3:'Hoy–Mañana',
+   kpi:[{i:'truck',bg:'#E5F3FF',c:'#0057B8',l:'Transportista',  v:'DHL',         s:'En ruta BCN-NTE'},
+        {i:'loc',  bg:'#E8F2FD',c:'#0070F2',l:'Última posición', v:'Tarragona',   s:'22/05 · 06:30h'},
+        {i:'pkg',  bg:'#E8F5EE',c:'#107E3E',l:'Tracking',        v:'1Z999AA1',    s:'···23456784'},
+        {i:'cal',  bg:'#F0EFFC',c:'#5C5C9E',l:'Fecha entrega',   v:'26/05/2025',  s:'Estimado'}],
+   tl:[{i:'order',c:'#5C5C9E',bg:'#F0EFFC',t:'Pedido recibido y confirmado',d:'Sistema SAP Service Cloud registró el pedido automáticamente',ts:'19/05/2025  09:14',ch:null},
+       {i:'check',c:'#107E3E',bg:'#E8F5EE',t:'Condiciones de pago verificadas',d:'Crédito aprobado · Cliente FAR-08192 activo en SAP ERP',ts:'19/05/2025  09:16',ch:null},
+       {i:'box',  c:'#107E3E',bg:'#E8F5EE',t:'Preparación completada',d:'Picking y embalaje finalizados · 15 unidades · 4,2 kg',ts:'20/05/2025  08:45',ch:null},
+       {i:'truck',c:'#107E3E',bg:'#E8F5EE',t:'Pedido expedido',d:'Albarán ALB-2025-049017 generado · Entregado a DHL Express Farma · 2 bultos confirmados',ts:'20/05/2025  14:22',ch:null},
+       {i:'loc',  c:'#107E3E',bg:'#E8F5EE',t:'Recogido por transportista',d:'DHL recogió el envío en almacén Tres Cantos, Madrid',ts:'20/05/2025  17:05',ch:null},
+       {i:'hub',  c:'#107E3E',bg:'#E8F5EE',t:'En hub logístico Madrid',d:'Paquete clasificado en centro DHL Coslada · Ruta BCN asignada automáticamente',ts:'21/05/2025  03:12',ch:null},
+       {i:'truck',c:'#0070F2',bg:'#E8F2FD',t:'En tránsito hacia destino',d:'Reparto asignado a ruta BCN-NTE · Última posición registrada: Tarragona · Llegada prevista 26/05',ts:'22/05/2025  06:30',ch:'En ruta',ct:'b'}]},
+R:{lbl:'Retrasado',bc:'br',si:2,at:'w',am:'Incidencia logística detectada con DHL (huelga zona Cataluña). Nueva fecha estimada: 28/05/2025. El SAC Normon ya gestiona el caso.',
+   el:'Nueva entrega est.',ev:'28/05/2025',e3:'Demorado',
+   kpi:[{i:'warn', bg:'#FEF0E0',c:'#E76500',l:'Incidencia',    v:'INC-084',     s:'Abierta 23/05'},
+        {i:'truck',bg:'#FEF0E0',c:'#E76500',l:'Transportista', v:'DHL',          s:'Ruta suspendida'},
+        {i:'cal',  bg:'#FEF0E0',c:'#E76500',l:'Nueva entrega', v:'28/05/2025',   s:'Reprogramado'},
+        {i:'agent',bg:'#E8F2FD',c:'#0070F2',l:'Caso SAC',      v:'#09831',       s:'En gestión'}],
+   tl:[{i:'order',c:'#5C5C9E',bg:'#F0EFFC',t:'Pedido recibido y confirmado',d:'Sistema SAP Service Cloud registró el pedido automáticamente',ts:'19/05/2025  09:14',ch:null},
+       {i:'check',c:'#107E3E',bg:'#E8F5EE',t:'Condiciones de pago verificadas',d:'Crédito aprobado · Cliente FAR-08192 activo en SAP ERP',ts:'19/05/2025  09:16',ch:null},
+       {i:'box',  c:'#107E3E',bg:'#E8F5EE',t:'Preparación completada',d:'Picking y embalaje finalizados · 15 unidades · 4,2 kg',ts:'20/05/2025  08:45',ch:null},
+       {i:'truck',c:'#107E3E',bg:'#E8F5EE',t:'Pedido expedido',d:'Albarán ALB-2025-049017 generado · Entregado a DHL Express Farma',ts:'20/05/2025  14:22',ch:null},
+       {i:'loc',  c:'#107E3E',bg:'#E8F5EE',t:'Recogido por transportista',d:'DHL recogió el envío en almacén Tres Cantos, Madrid',ts:'20/05/2025  17:05',ch:null},
+       {i:'hub',  c:'#107E3E',bg:'#E8F5EE',t:'En hub logístico Madrid',d:'Clasificación en centro DHL Coslada',ts:'21/05/2025  03:12',ch:null},
+       {i:'warn', c:'#E76500',bg:'#FEF0E0',t:'Incidencia logística detectada',d:'Huelga de transportistas zona Cataluña · DHL suspende ruta BCN-NTE · ETA revisado al 28/05',ts:'23/05/2025  11:40',ch:'Alerta',ct:'o'},
+       {i:'agent',c:'#E76500',bg:'#FEF0E0',t:'Caso abierto en SAC Normon',d:'Agente L. González gestiona reprogramación con DHL · Caso #SAC-2025-09831 · Nueva fecha: 28/05',ts:'23/05/2025  12:15',ch:'En gestión',ct:'o'}]},
+E:{lbl:'Entregado',bc:'bv',si:4,at:'s',am:'Pedido entregado el 26/05/2025 a las 11:22h. Firma electrónica registrada. Valore la experiencia de entrega.',
+   el:'Entregado el',ev:'26/05/2025',e3:'11:22h',rating:true,
+   kpi:[{i:'check',bg:'#E8F5EE',c:'#107E3E',l:'Estado',      v:'Entregado',   s:'26/05 · 11:22h'},
+        {i:'sign', bg:'#E8F5EE',c:'#107E3E',l:'Receptor',     v:'A. Martínez', s:'Firma digital OK'},
+        {i:'truck',bg:'#E8F5EE',c:'#107E3E',l:'Transportista',v:'DHL',         s:'Express Farma'},
+        {i:'euro', bg:'#E8F5EE',c:'#107E3E',l:'Total c/IVA',  v:'1.284,60 €',  s:'IVA incluido (21%)'}],
+   tl:[{i:'order',c:'#5C5C9E',bg:'#F0EFFC',t:'Pedido recibido y confirmado',d:'Sistema SAP Service Cloud registró el pedido automáticamente',ts:'19/05/2025  09:14',ch:null},
+       {i:'check',c:'#107E3E',bg:'#E8F5EE',t:'Condiciones de pago verificadas',d:'Crédito aprobado · Cliente FAR-08192 activo en SAP ERP',ts:'19/05/2025  09:16',ch:null},
+       {i:'box',  c:'#107E3E',bg:'#E8F5EE',t:'Preparación completada',d:'Picking y embalaje finalizados · 15 unidades · 4,2 kg',ts:'20/05/2025  08:45',ch:null},
+       {i:'truck',c:'#107E3E',bg:'#E8F5EE',t:'Pedido expedido',d:'Albarán ALB-2025-049017 · Entregado a DHL Express Farma',ts:'20/05/2025  14:22',ch:null},
+       {i:'loc',  c:'#107E3E',bg:'#E8F5EE',t:'Recogido por transportista',d:'DHL recogió el envío en almacén Tres Cantos, Madrid · 2 bultos confirmados',ts:'20/05/2025  17:05',ch:null},
+       {i:'hub',  c:'#107E3E',bg:'#E8F5EE',t:'En hub logístico Madrid',d:'Clasificación DHL Coslada · Ruta BCN asignada',ts:'21/05/2025  03:12',ch:null},
+       {i:'truck',c:'#107E3E',bg:'#E8F5EE',t:'Reparto iniciado',d:'Repartidor M.A. Serrano · Matrícula 4821-JKP · Salida almacén 08:05h',ts:'26/05/2025  08:05',ch:null},
+       {i:'sign', c:'#107E3E',bg:'#E8F5EE',t:'Pedido entregado',d:'Recibido por A. Martínez — Farmacia El Rosal · Firma electrónica registrada correctamente',ts:'26/05/2025  11:22',ch:'Entregado',ct:'g'}]},
+};
 
-            <th>Descripción</th>
+let cur='T', stars=0;
 
-        </tr>
+function go(s){cur=s;stars=0;document.querySelectorAll('.dtab').forEach(b=>b.classList.toggle('on',b.dataset.s===s));render();}
 
-    </table>
+function render(){
+  const d=D[cur];
+  const chipMap={b:'chip chip-b',g:'chip chip-g',o:'chip chip-o'};
+  const LBLS=['En Prep.','Expedido',cur==='R'?'Retrasado':'En Tránsito','Entregado'];
+  const STEPS=[0,1,2,4];
+  const aico={i:S.info,w:S.warn,s:S.check}[d.at];
+  const acls={i:'alrt al-i',w:'alrt al-w',s:'alrt al-s'}[d.at];
 
- 
+  // Header badge
+  const hb=document.getElementById('hbadge');
+  hb.className='hbadge '+d.bc;
+  hb.innerHTML='<span class="dot"></span>'+d.lbl;
 
-    <script>
+  // Stepper
+  let stepH='<div class="srow">';
+  STEPS.forEach((si,idx)=>{
+    const done=d.si>si, isAct=d.si===si, isW=cur==='R'&&isAct;
+    const dotCls=done?(cur==='E'?'sdot ok':'sdot done'):isW?'sdot wn':isAct?'sdot act':'sdot';
+    const lblCls=done?(cur==='E'?'slbl ok':'slbl done'):isW?'slbl wn':isAct?'slbl act':'slbl';
+    const dotIn=(done||(cur==='E'&&isAct))?S.cd:isW?S.wd:(idx+1);
+    const conCls=done?(cur==='E'?'scon ok':'scon done'):isW?'scon wn':'scon';
+    stepH+='<div class="step">';
+    if(idx>0) stepH+=`<div class="${conCls}"></div>`;
+    stepH+=`<div class="${dotCls}">${dotIn}</div><div class="${lblCls}">${LBLS[idx]}</div></div>`;
+  });
+  stepH+='</div>';
 
-        function generateIncidents() {
+  // KPIs
+  let kpiH='<div class="kpis">';
+  d.kpi.forEach(k=>{
+    kpiH+=`<div class="kpi fu">
+      <div class="kpi-ico" style="background:${k.bg};color:${k.c}">${S[k.i]||S.info}</div>
+      <div class="kpi-lbl">${k.l}</div>
+      <div class="kpi-val" style="color:${k.c}">${k.v}</div>
+      <div class="kpi-sub">${k.s}</div>
+    </div>`;
+  });
+  kpiH+='</div>';
 
-            var postalCode = document.getElementById("postalCode").value;
+  // Timeline
+  let tlH='';
+  d.tl.forEach(ev=>{
+    const chH=ev.ch?`<span class="${chipMap[ev.ct||'b']}">${ev.ch}</span>`:'';
+    tlH+=`<div class="tli fu">
+      <div class="tll">
+        <div class="tlic" style="background:${ev.bg};color:${ev.c}">${S[ev.i]||S.check}</div>
+        <div class="tline"></div>
+      </div>
+      <div class="tlc">
+        <div class="tlt">${ev.t}</div>
+        <div class="tld">${ev.d}</div>
+        <div class="tlmeta">
+          <span class="tltime">${S.tclock}&nbsp;${ev.ts}</span>
+          ${chH}
+        </div>
+      </div>
+    </div>`;
+  });
 
- 
+  // Prods table
+  let pRows='';
+  PRODS.forEach(p=>{
+    pRows+=`<tr>
+      <td><span class="pemo">${p.e}</span></td>
+      <td><div class="pname">${p.n}</div><div class="pref">${p.r}</div></td>
+      <td>${p.d}</td>
+      <td><span class="blot">${p.lot}</span></td>
+      <td style="text-align:center"><span class="pqty">${p.q} ${p.u}</span></td>
+      <td style="text-align:right">${p.price}</td>
+      <td style="text-align:right;font-weight:700">${p.total}</td>
+    </tr>`;
+  });
 
-            if (!postalCode) {
+  // Rating
+  const ratingH=d.rating?`
+    <div style="padding:14px 16px;border-top:1px solid var(--border-l)">
+      <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:2px">Valore la experiencia de entrega</div>
+      <div class="rrow">${[1,2,3,4,5].map(n=>`<button class="star ${stars>=n?'on':''}" onclick="rate(${n})">&#9733;</button>`).join('')}</div>
+      ${stars>0?'<div style="font-size:11px;color:var(--ok);margin-top:6px;font-weight:600">Gracias por su valoración.</div>':''}
+    </div>`:'';
 
-                alert("Please enter a postal code.");
+  // LEFT COL
+  document.getElementById('lcol').innerHTML=`
+    <!-- Status card -->
+    <div class="card fu">
+      <div class="sw">${stepH}</div>
+      <div class="etastrip">
+        <div class="etac"><div class="etal">Fecha pedido</div><div class="etav">19/05/2025</div></div>
+        <div class="etac"><div class="etal">${d.el}</div><div class="etav" style="color:${cur==='R'?'var(--warn)':cur==='E'?'var(--ok)':'var(--text)'}">${d.ev}</div></div>
+        <div class="etac"><div class="etal">${cur==='E'?'Hora entrega':cur==='R'?'Estado':'Tiempo est.'}</div><div class="etav">${d.e3}</div></div>
+      </div>
+      <div style="padding:12px 16px 14px">
+        <div class="${acls}">${aico}<span class="alrt-t">${d.am}</span></div>
+      </div>
+      ${ratingH}
+    </div>
 
-                return;
+    <!-- Shipping info -->
+    <div class="card fu">
+      <div class="ch">${S.pin}Información de Envío</div>
+      <div class="cb">
+        <div class="kv">
+          <div class="kvi" style="background:#E8F2FD;color:var(--brand)">${S.usr}</div>
+          <div class="kvr"><div class="kvk">Cliente</div><div class="kvv">Farmacia CBont</div><div class="kvsub">Código: FAR-08192 · Segmento: Farmacia comunitaria</div></div>
+        </div>
+        <div class="kv">
+          <div class="kvi" style="background:#E8F2FD;color:var(--brand)">${S.pin}</div>
+          <div class="kvr"><div class="kvk">Dirección de entrega</div><div class="kvv">C/ Gràcia, 142</div><div class="kvsub">08012 Barcelona, Catalunya</div></div>
+        </div>
+        <div class="kv">
+          <div class="kvi" style="background:#E8F2FD;color:var(--brand)">${S.truck}</div>
+          <div class="kvr"><div class="kvk">Transportista</div><div class="kvv">DHL Express Farma</div><div class="kvsub">Priority Pharma 24h · Temperatura controlada 2–25°C</div></div>
+        </div>
+        <div class="kv">
+          <div class="kvi" style="background:#E8F5EE;color:var(--ok)">${S.doc}</div>
+          <div class="kvr"><div class="kvk">Nº de seguimiento</div><div class="kvv mono">1Z999AA10123456784</div>
+            <div style="margin-top:5px"><span class="tag tgb" style="cursor:pointer" onclick="toast2('Abriendo tracking DHL...')">Ver en DHL ↗</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            }
+    <!-- Order details -->
+    <div class="card fu">
+      <div class="ch">${S.list}Detalles del Pedido</div>
+      <div class="cb">
+        <div class="kv">
+          <div class="kvi" style="background:#EEF0F2;color:#5C6873">${S.doc}</div>
+          <div class="kvr"><div class="kvk">Orden de compra</div><div class="kvv mono">OC-FAR-2025-00831</div></div>
+        </div>
+        <div class="kv">
+          <div class="kvi" style="background:#EEF0F2;color:#5C6873">${S.info}</div>
+          <div class="kvr"><div class="kvk">Canal de pedido</div><div class="kvv">Portal de Clientes · Web</div></div>
+        </div>
+        <div class="kv">
+          <div class="kvi" style="background:#EEF0F2;color:#5C6873">${S.usr}</div>
+          <div class="kvr"><div class="kvk">Gestor de cuenta</div><div class="kvv">Laura González Martín</div><div class="kvsub">Región: Cataluña · lau.gonzalez@normon.es</div></div>
+        </div>
+        <div class="kv">
+          <div class="kvi" style="background:#EEF0F2;color:#5C6873">${S.info}</div>
+          <div class="kvr"><div class="kvk">Condiciones de pago</div><div class="kvv">30 días neto · SEPA débito</div></div>
+        </div>
+        <div class="kv">
+          <div class="kvi" style="background:#EEF0F2;color:#5C6873">${S.euro}</div>
+          <div class="kvr"><div class="kvk">Importe total (IVA incl.)</div><div class="kvv" style="font-size:16px;font-weight:700;color:var(--text)">1.284,60 €</div><div class="kvsub">Base imponible: 1.062,70 € · IVA 21%: 222,17 €</div></div>
+        </div>
+      </div>
+    </div>
 
- 
+    <!-- Documents -->
+    <div class="card fu">
+      <div class="ch">${S.doc}Documentos</div>
+      <div class="cb">
+        <div class="di" onclick="toast2('Descargando albarán...')"><div class="dico" style="background:#E8F2FD">📄</div><div class="dinfo"><div class="dname">Albarán de entrega</div><div class="dmeta">ALB-2025-049017 · PDF · 128 KB</div></div><button class="dlbtn">${S.dl}</button></div>
+        <div class="di" onclick="toast2('Descargando factura...')"><div class="dico" style="background:#E8F5EE">🧾</div><div class="dinfo"><div class="dname">Factura</div><div class="dmeta">FAC-2025-038441 · PDF · 96 KB</div></div><button class="dlbtn">${S.dl}</button></div>
+        <div class="di" onclick="toast2('Descargando certificados...')"><div class="dico" style="background:#F0EFFC">📋</div><div class="dinfo"><div class="dname">Certificado análisis de lotes</div><div class="dmeta">MET/AMO/SIM/CUR · PDF · 340 KB</div></div><button class="dlbtn">${S.dl}</button></div>
+      </div>
+    </div>
+  `;
 
-            var incidentTable = document.getElementById("incidentTable");
+  // RIGHT COL
+  document.getElementById('rcol').innerHTML=`
+    <!-- KPIs -->
+    ${kpiH}
 
- 
+    <!-- Products -->
+    <div class="card fu">
+      <div class="ch">${S.pkg}Artículos del Pedido<span class="chr">4 referencias · 15 unidades · 4,2 kg</span></div>
+      <div style="overflow-x:auto">
+        <table class="ptbl">
+          <thead>
+            <tr>
+              <th style="width:40px"></th>
+              <th>Producto</th>
+              <th>Descripción</th>
+              <th>Lote</th>
+              <th style="text-align:center">Cantidad</th>
+              <th style="text-align:right">P. unitario</th>
+              <th style="text-align:right">Total</th>
+            </tr>
+          </thead>
+          <tbody>${pRows}</tbody>
+          <tfoot>
+            <tr>
+              <td colspan="5" style="font-size:11px;color:var(--text3)">Base imponible</td>
+              <td></td>
+              <td style="text-align:right;color:var(--text)">1.062,70 €</td>
+            </tr>
+            <tr>
+              <td colspan="5" style="font-size:11px;color:var(--text3)">IVA (21%)</td>
+              <td></td>
+              <td style="text-align:right;color:var(--text)">222,17 €</td>
+            </tr>
+            <tr>
+              <td colspan="5" style="font-size:12px;font-weight:700">TOTAL</td>
+              <td></td>
+              <td style="text-align:right;font-size:15px;font-weight:700;color:var(--brand)">1.284,60 €</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
 
-            // Clear any existing rows
+    <!-- Timeline -->
+    <div class="card fu">
+      <div class="ch">${S.hist}Historial de Eventos<span class="chr">${d.tl.length} eventos registrados</span></div>
+      <div class="cb">
+        <div class="tl">${tlH}</div>
+      </div>
+    </div>
+  `;
 
-            while (incidentTable.rows.length > 1) {
+  if(d.rating){
+    document.querySelectorAll('.star').forEach((s,i)=>{s.onclick=()=>rate(i+1);});
+  }
+}
 
-                incidentTable.deleteRow(1);
+function rate(n){
+  stars=n;
+  document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('on',n>i));
+  const fb=document.querySelector('.rrow+div');
+  if(!fb){const row=document.querySelector('.rrow');if(row){const d=document.createElement('div');d.style.cssText='font-size:11px;color:var(--ok);margin-top:6px;font-weight:600';d.textContent='Gracias por su valoración.';row.parentNode.appendChild(d);}}
+}
 
-            }
+let tt;
+function toast2(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2200);}
 
- 
-
-            // Generate some random incidents
-
-            for (var i = 0; i < 5; i++) {
-
-                var row = incidentTable.insertRow();
-
- 
-
-                var cell1 = row.insertCell(0);
-
-                var cell2 = row.insertCell(1);
-
- 
-
-                var incidentId = Math.floor(Math.random() * 10000);
-
-                cell1.innerHTML = `<a href="#">${incidentId}</a>`;
-
-                cell2.textContent = `Incidencia ${i+1} en C.P.: ${postalCode}.`;
-
-            }
-
-        }
-
-    </script>
-    
-    <br>
-    <h2>Mapa de Incidencias</h2>
-
-<section id="primary" class="content-area medium-12 columns">
-		<main id="main" class="site-main" role="main">
-
-			                									
-<article id="post-271" class="post-271 page type-page status-publish hentry wordpress-sticky">
-	
-	
-	<div class="entry-content">
-		<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
-	<div class="wpb_raw_code wpb_content_element wpb_raw_html">
-		<div class="wpb_wrapper">
-			<iframe allow="geolocation" width="100%" height="650" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gisoperaciones.ufd.es/portal/apps/webappviewer/index.html?id=3d9fd08947cd422ea6b8263fc04897d8"></iframe>
-
-		</div>
-	</div>
-
-	<div class="wpb_text_column wpb_content_element ">
-		<div class="wpb_wrapper">
-			<p><b>En el mapa no se visualizará información de incidencias o trabajos programados finalizados</b></p>
-
-		</div>
-	</div>
-</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_empty_space" style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
-	<div class="wpb_text_column wpb_content_element ">
-		<div class="wpb_wrapper">
-			<p>&nbsp;</p>
-
-		</div>
-	</div>
-</div></div></div></div>
-</div>	</div><!-- .entry-content -->
-
-</article><!-- #post-## -->
-							
-		</main><!-- #main -->
-	</section>
-
+render();
+</script>
 </body>
-
 </html>
