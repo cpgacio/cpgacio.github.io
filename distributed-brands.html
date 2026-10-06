@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Distributed Brands</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #f5f6f7;
+      font-family: "72", "72full", Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      color: #32363a;
+      padding: 32px 24px;
+      min-height: 100vh;
+    }
+
+    /* ── Card ───────────────────────────────────────────────── */
+    .card {
+      background: #ffffff;
+      border: 1px solid #d1d5da;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    /* ── Card Header ────────────────────────────────────────── */
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      border-bottom: 1px solid #e8eaec;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1d2d3e;
+      letter-spacing: 0.01em;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 2px;
+      align-items: center;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #0070f2;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: background 0.15s ease;
+    }
+
+    .icon-btn:hover { background: #e8f3fe; }
+    .icon-btn svg { width: 18px; height: 18px; }
+
+    /* ── Table ──────────────────────────────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    /* Header row */
+    thead tr { border-bottom: 2px solid #e2e5e8; }
+
+    th {
+      padding: 10px 20px;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 600;
+      color: #556b82;
+      white-space: nowrap;
+      user-select: none;
+      background: #fff;
+    }
+
+    th.th-actions { text-align: right; }
+
+    .sort-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #0070f2;
+      display: inline-flex;
+      align-items: center;
+      padding: 0;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+
+    .sort-btn svg { width: 11px; height: 13px; }
+
+    /* Table cells */
+    td {
+      border-bottom: 1px solid #e8eaec;
+      vertical-align: middle;
+    }
+
+    /* ── Group header row ───────────────────────────────────── */
+    .group-row td { padding: 11px 20px; }
+    .group-row:hover td { background: #f5f9ff; }
+
+    .group-first-cell {
+      display: flex;
+      align-items: center;
+    }
+
+    .toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #0070f2;
+      border-radius: 2px;
+      cursor: pointer;
+      color: #0070f2;
+      font-size: 18px;
+      font-weight: 700;
+      margin-right: 12px;
+      flex-shrink: 0;
+      user-select: none;
+      line-height: 1;
+      transition: background 0.15s ease;
+    }
+
+    .toggle-btn:hover { background: #e8f3fe; }
+
+    .group-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: #1d2d3e;
+    }
+
+    /* second-cell — hierarchy level + count */
+    .group-meta-cell {
+      display: flex;
+      align-items: center;
+    }
+
+    .group-hierarchy {
+      font-size: 13px;
+      font-weight: 500;
+      color: #1d2d3e;
+    }
+
+    .pipe {
+      margin: 0 8px;
+      color: #bfc4ca;
+    }
+
+    .group-count {
+      font-size: 13px;
+      color: #556b82;
+    }
+
+    /* group action buttons */
+    .group-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #0070f2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 4px;
+      transition: background 0.15s ease;
+    }
+
+    .action-btn:hover { background: #e8f3fe; }
+    .action-btn svg { width: 16px; height: 16px; }
+
+    /* ── Child rows ─────────────────────────────────────────── */
+    .child-row td { padding: 7px 20px; background: #fff; }
+    .child-row:hover td { background: #f5f9ff; }
+
+    /* Brand dropdown pill */
+    .brand-dropdown {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid #c8cdd2;
+      border-radius: 4px;
+      padding: 6px 10px 6px 12px;
+      background: #fff;
+      cursor: pointer;
+      min-width: 240px;
+      max-width: 480px;
+      gap: 10px;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .brand-dropdown:hover {
+      border-color: #0070f2;
+      box-shadow: 0 0 0 1px #0070f2;
+    }
+
+    .brand-dropdown .brand-text {
+      font-size: 14px;
+      color: #1d2d3e;
+    }
+
+    .brand-dropdown .chev {
+      color: #556b82;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Last child of a group gets a slightly stronger bottom border */
+    .group-end td {
+      border-bottom: 1px solid #d1d5da;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- Card header -->
+  <div class="card-header">
+    <span class="card-title">Distributed Brands (2)</span>
+    <div class="header-actions">
+
+      <!-- Sort/Organise columns -->
+      <button class="icon-btn" title="Sort and Organise">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="5" x2="17" y2="5"/>
+          <line x1="3" y1="10" x2="13" y2="10"/>
+          <line x1="3" y1="15" x2="9" y2="15"/>
+          <polyline points="20 8 23 11 20 14"/>
+          <line x1="23" y1="11" x2="14" y2="11"/>
+        </svg>
+      </button>
+
+      <!-- Refresh -->
+      <button class="icon-btn" title="Refresh">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="23 4 23 10 17 10"/>
+          <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+        </svg>
+      </button>
+
+      <!-- Fullscreen -->
+      <button class="icon-btn" title="Expand to full screen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 3 21 3 21 9"/>
+          <polyline points="9 21 3 21 3 15"/>
+          <line x1="21" y1="3" x2="14" y2="10"/>
+          <line x1="3" y1="21" x2="10" y2="14"/>
+        </svg>
+      </button>
+
+      <!-- Collapse all -->
+      <button class="icon-btn" title="Collapse all groups" onclick="collapseAll()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+             stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="18 15 12 9 6 15"/>
+        </svg>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Table -->
+  <table>
+    <thead>
+      <tr>
+        <th>
+          PUIG / Competitors
+          <button class="sort-btn" title="Sort">
+            <svg viewBox="0 0 11 14" fill="currentColor">
+              <path d="M5.5 0 L9.5 5 H1.5 Z"/>
+              <path d="M5.5 14 L1.5 9 H9.5 Z"/>
+            </svg>
+          </button>
+        </th>
+        <th>
+          Brand Hierarchy Level
+          <button class="sort-btn" title="Sort">
+            <svg viewBox="0 0 11 14" fill="currentColor">
+              <path d="M5.5 0 L9.5 5 H1.5 Z"/>
+              <path d="M5.5 14 L1.5 9 H9.5 Z"/>
+            </svg>
+          </button>
+        </th>
+        <th>
+          Value
+          <button class="sort-btn" title="Sort">
+            <svg viewBox="0 0 11 14" fill="currentColor">
+              <path d="M5.5 0 L9.5 5 H1.5 Z"/>
+              <path d="M5.5 14 L1.5 9 H9.5 Z"/>
+            </svg>
+          </button>
+        </th>
+        <th class="th-actions">Actions</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+
+</div>
+
+<script>
+  /* ── Data ─────────────────────────────────────────── */
+  const groups = [
+    {
+      name: '1. Fragrances Puig Brands',
+      hierarchy: 'Fragrances Brand',
+      brands: ['Adolfo Dominguez', 'Carolina Herrera', 'Distributed Hermès', 'Jean Paul Gaultier', 'Rabanne'],
+      expanded: true
+    },
+    {
+      name: '2. Fragrances Competitor Brands',
+      hierarchy: 'Frangrances Competitor Brands',
+      brands: ['PRADA COMP.', 'Chanel', 'G. Armani', 'Lancome', 'YSL', 'C.Dior', 'Guerlain', 'D&G', 'H.Boss', 'Loewe'],
+      expanded: true
+    }
+  ];
+
+  /* ── Inline SVG icons ─────────────────────────────── */
+  const PENCIL = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+  </svg>`;
+
+  const XMARK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+    stroke-linecap="round" stroke-linejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18"/>
+    <line x1="6" y1="6" x2="18" y2="18"/>
+  </svg>`;
+
+  const CHEVRON_DOWN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+    <polyline points="6 9 12 15 18 9"/>
+  </svg>`;
+
+  /* ── Render ───────────────────────────────────────── */
+  function render() {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+
+    groups.forEach((g, gi) => {
+      const total = g.brands.length;
+
+      /* Group header row */
+      const headerRow = document.createElement('tr');
+      headerRow.className = 'group-row';
+      headerRow.innerHTML = `
+        <td>
+          <div class="group-first-cell">
+            <span class="toggle-btn" onclick="toggle(${gi})"
+                  title="${g.expanded ? 'Collapse' : 'Expand'}">
+              ${g.expanded ? '&#x2212;' : '&#43;'}
+            </span>
+            <span class="group-name">${g.name}</span>
+          </div>
+        </td>
+        <td>
+          <div class="group-meta-cell">
+            <span class="group-hierarchy">${g.hierarchy}</span>
+            <span class="pipe">|</span>
+            <span class="group-count">${total}/${total} Brands are maintained</span>
+          </div>
+        </td>
+        <td></td>
+        <td style="padding-right:16px;">
+          <div class="group-actions">
+            <button class="action-btn" title="Edit">${PENCIL}</button>
+            <button class="action-btn" title="Remove">${XMARK}</button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(headerRow);
+
+      /* Child rows (only when expanded) */
+      if (g.expanded) {
+        g.brands.forEach((brand, bi) => {
+          const isLast = bi === g.brands.length - 1;
+          const childRow = document.createElement('tr');
+          childRow.className = 'child-row' + (isLast ? ' group-end' : '');
+          childRow.innerHTML = `
+            <td></td>
+            <td></td>
+            <td>
+              <div class="brand-dropdown">
+                <span class="brand-text">${brand}</span>
+                <span class="chev">${CHEVRON_DOWN}</span>
+              </div>
+            </td>
+            <td style="padding-right:16px;">
+              <div class="group-actions">
+                <button class="action-btn" title="Remove">${XMARK}</button>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(childRow);
+        });
+      }
+    });
+  }
+
+  function toggle(gi) {
+    groups[gi].expanded = !groups[gi].expanded;
+    render();
+  }
+
+  function collapseAll() {
+    groups.forEach(g => g.expanded = false);
+    render();
+  }
+
+  render();
+</script>
+</body>
+</html>
