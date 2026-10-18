@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compradores en Proceso — Inmueble URF-2024-1847</title>
+<style>
+  :root{
+    --blue:#0070F2;
+    --title:#354A5F;
+    --text:#32363A;
+    --muted:#6A6D70;
+    --divider:#E5E5E5;
+    --row-hover:#F5F6F7;
+    --panel-bg:#F7F8F9;
+    --card-bg:#FFFFFF;
+    --me-bg:#EAF3FF;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:#EDEEF0;color:var(--text);padding:40px 24px;
+    font-family:"72","72override",-apple-system,"Segoe UI",Arial,sans-serif;}
+  .panel{max-width:1280px;margin:0 auto;background:var(--panel-bg);border-radius:14px;
+    padding:20px 22px 24px;box-shadow:0 1px 4px rgba(0,0,0,.08);}
+  .panel-header{display:flex;align-items:flex-start;justify-content:space-between;margin:4px 2px 4px;}
+  .panel-title{font-size:22px;font-weight:700;color:var(--title);letter-spacing:.2px;}
+  .panel-sub{font-size:14px;color:var(--muted);margin:6px 2px 16px;}
+  .panel-sub b{color:var(--text);font-weight:600;}
+  .toolbar{display:flex;align-items:center;gap:18px;}
+  .toolbar button{background:none;border:none;cursor:pointer;padding:2px;display:inline-flex;}
+  .toolbar button:hover svg{opacity:.7;}
+
+  .table-card{background:var(--card-bg);border:1px solid var(--divider);border-radius:10px;overflow:auto;}
+  table.rt{width:100%;border-collapse:collapse;min-width:1120px;}
+  thead th{text-align:left;padding:16px 16px;color:var(--title);font-weight:700;font-size:14px;
+    border-bottom:1px solid var(--divider);white-space:nowrap;background:var(--card-bg);}
+  thead th .sort{display:inline-flex;flex-direction:column;line-height:0;margin-left:6px;vertical-align:middle;}
+  tbody td{padding:15px 16px;font-size:14.5px;border-bottom:1px solid var(--divider);color:var(--text);
+    white-space:nowrap;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover td{background:var(--row-hover);}
+  tbody tr.me td{background:var(--me-bg);}
+  tbody tr.me:hover td{background:#DCECFF;}
+
+  .prio{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;
+    border-radius:50%;background:#EFF1F2;color:var(--title);font-weight:700;font-size:13px;}
+  .prio.top{background:#0070F2;color:#fff;}
+
+  .client{font-weight:600;color:#1D2D3E;}
+  .tag-me{display:inline-block;margin-left:8px;font-size:11px;font-weight:700;color:#0070F2;
+    background:#fff;border:1px solid #0070F2;border-radius:10px;padding:1px 8px;vertical-align:middle;}
+
+  a.opp{color:var(--blue);text-decoration:none;font-weight:600;}
+  a.opp:hover{text-decoration:underline;}
+
+  .chip{font-size:12.5px;font-weight:600;padding:3px 12px;border-radius:14px;white-space:nowrap;}
+  .f-cual{background:#EAF3FF;color:#0070F2;}
+  .f-nego{background:#FEF3E0;color:#C25A00;}
+  .f-cie{background:#EBF5E6;color:#256F3A;}
+  .s-alto{background:#EBF5E6;color:#256F3A;}
+  .s-medio{background:#FEF3E0;color:#C25A00;}
+  .s-bajo{background:#F4E8E8;color:#AA0808;}
+  .score-n{color:var(--muted);font-size:12.5px;margin-left:6px;}
+
+  .num{font-variant-numeric:tabular-nums;}
+  .muted{color:#B0B4B8;font-style:italic;}
+  .legend{font-size:12.5px;color:var(--muted);margin:12px 4px 0;}
+</style>
+</head>
+<body>
+  <div class="panel">
+    <div class="panel-header">
+      <div>
+        <div class="panel-title">Compradores en Proceso para este Inmueble (5)</div>
+      </div>
+      <div class="toolbar" id="toolbar"></div>
+    </div>
+    <div class="panel-sub">
+      Inmueble <b>URF-2024-1847</b> &nbsp;·&nbsp; Piso reformado &nbsp;·&nbsp; Chamberi, Madrid
+      &nbsp;·&nbsp; 95 m&sup2; con terraza &nbsp;·&nbsp; Precio de venta <b>450.000 EUR</b>
+    </div>
+
+    <div class="table-card">
+      <table class="rt">
+        <thead>
+          <tr>
+            <th>Prioridad</th>
+            <th>Cliente <span class="sort"><svg width="9" height="12" viewBox="0 0 10 14"><path d="M5 0 L9 5 H1 Z" fill="#0070F2"/><path d="M5 14 L1 9 H9 Z" fill="#0070F2"/></svg></span></th>
+            <th>ID Oportunidad</th>
+            <th>Fase <span class="sort"><svg width="9" height="12" viewBox="0 0 10 14"><path d="M5 0 L9 5 H1 Z" fill="#0070F2"/><path d="M5 14 L1 9 H9 Z" fill="#0070F2"/></svg></span></th>
+            <th>Scoring <span class="sort"><svg width="9" height="12" viewBox="0 0 10 14"><path d="M5 0 L9 5 H1 Z" fill="#0070F2"/><path d="M5 14 L1 9 H9 Z" fill="#0070F2"/></svg></span></th>
+            <th>Valor ofertado <span class="sort"><svg width="9" height="12" viewBox="0 0 10 14"><path d="M5 0 L9 5 H1 Z" fill="#0070F2"/><path d="M5 14 L1 9 H9 Z" fill="#0070F2"/></svg></span></th>
+            <th>Probabilidad</th>
+            <th>Financiacion</th>
+            <th>Ultima actividad</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+
+    <div class="legend">
+      La <b>prioridad</b> refleja el orden en la lista de interesados sobre el mismo inmueble (lista de espera),
+      calculada por scoring, fase y valor ofertado. La fila resaltada es la oportunidad actual de Vanesa Garcia.
+    </div>
+  </div>
+
+<script>
+const LINK_TMPL = "https://my1000321.de1.demo.crm.cloud.sap/go/detail/guidedselling?id={{DisplayID}}";
+const oppLink = (id)=> LINK_TMPL.replace("{{DisplayID}}", id);
+
+const faseChip = {
+  "Cualificacion":"f-cual", "Negociacion":"f-nego", "Cierre":"f-cie"
+};
+const scoreChip = { "Alto":"s-alto", "Medio":"s-medio", "Bajo":"s-bajo" };
+
+const buyers = [
+  { prio:1, me:true,  cliente:"Vanesa Garcia",        id:"8000002847", fase:"Negociacion",
+    scoring:"Alto",  score:87, oferta:"440.000 EUR", prob:"72%", fin:"Hipoteca en tramite", ult:"Hoy" },
+  { prio:2, me:false, cliente:"Lorenzo Maggi",         id:"8000002831", fase:"Negociacion",
+    scoring:"Alto",  score:82, oferta:"435.000 EUR", prob:"65%", fin:"Pre-aprobada",        ult:"Hace 1 dia" },
+  { prio:3, me:false, cliente:"Laura Fernandez Gil",  id:"8000002860", fase:"Cualificacion",
+    scoring:"Medio", score:64, oferta:"",            prob:"38%", fin:"Pendiente",           ult:"Hace 3 dias" },
+  { prio:4, me:false, cliente:"Marta Sanchez Rubio",  id:"8000002855", fase:"Cualificacion",
+    scoring:"Medio", score:58, oferta:"",            prob:"30%", fin:"Sin iniciar",         ult:"Hace 5 dias" },
+  { prio:5, me:false, cliente:"Alex Urrutia",          id:"8000002812", fase:"Cualificacion",
+    scoring:"Bajo",  score:41, oferta:"",            prob:"18%", fin:"Sin iniciar",         ult:"Hace 8 dias" }
+];
+
+function render(){
+  const tb = document.getElementById("rows");
+  tb.innerHTML = "";
+  buyers.forEach(b=>{
+    const tr = document.createElement("tr");
+    if(b.me) tr.className = "me";
+    const oferta = b.oferta ? '<span class="num">'+b.oferta+'</span>' : '<span class="muted">Sin oferta</span>';
+    tr.innerHTML =
+      '<td><span class="prio'+(b.prio===1?' top':'')+'">'+b.prio+'</span></td>'+
+      '<td><span class="client">'+b.cliente+'</span></td>'+
+      '<td><a class="opp" href="'+oppLink(b.id)+'" target="_blank" rel="noopener">'+b.id+'</a></td>'+
+      '<td><span class="chip '+faseChip[b.fase]+'">'+b.fase+'</span></td>'+
+      '<td><span class="chip '+scoreChip[b.scoring]+'">'+b.scoring+'</span><span class="score-n">'+b.score+'/100</span></td>'+
+      '<td>'+oferta+'</td>'+
+      '<td class="num">'+b.prob+'</td>'+
+      '<td>'+b.fin+'</td>'+
+      '<td>'+b.ult+'</td>';
+    tb.appendChild(tr);
+  });
+}
+
+// toolbar
+document.getElementById("toolbar").innerHTML =
+  '<button title="Anadir interesado"><svg width="22" height="20" viewBox="0 0 22 20"><path d="M2 5 H12 M2 10 H11 M2 15 H8" stroke="#0070F2" stroke-width="1.6" stroke-linecap="round"/><path d="M17 8 V18 M12 13 H22" stroke="#0070F2" stroke-width="1.6" stroke-linecap="round"/></svg></button>'+
+  '<button title="Actualizar"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M16 10 A6 6 0 1 1 14.5 6" fill="none" stroke="#0070F2" stroke-width="1.6" stroke-linecap="round"/><path d="M15 2.5 L15 6.4 L11.1 6.4" fill="none" stroke="#0070F2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>'+
+  '<button title="Pantalla completa"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M3 7 V3 H7 M13 3 H17 V7 M17 13 V17 H13 M7 17 H3 V13" fill="none" stroke="#0070F2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+
+render();
+</script>
+</body>
+</html>
