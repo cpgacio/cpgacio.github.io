@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Atributos de Marketing — Vanesa Garcia</title>
+<title>Atributos de Marketing y Campañas</title>
 <style>
   :root{
     --blue:#0070F2;
@@ -25,97 +25,52 @@
   }
   .panel{
     max-width:1180px;
-    margin:0 auto;
+    margin:0 auto 28px;
     background:var(--panel-bg);
     border-radius:14px;
     padding:20px 22px 24px;
     box-shadow:0 1px 4px rgba(0,0,0,.08);
   }
   .panel-header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+    display:flex;align-items:center;justify-content:space-between;
     margin:4px 2px 16px;
   }
-  .panel-title{
-    font-size:22px;
-    font-weight:700;
-    color:var(--title);
-    letter-spacing:.2px;
-  }
+  .panel-title{font-size:22px;font-weight:700;color:var(--title);letter-spacing:.2px;}
   .toolbar{display:flex;align-items:center;gap:18px;}
-  .toolbar button{
-    background:none;border:none;cursor:pointer;padding:2px;
-    display:inline-flex;align-items:center;justify-content:center;
-  }
+  .toolbar button{background:none;border:none;cursor:pointer;padding:2px;
+    display:inline-flex;align-items:center;justify-content:center;}
   .toolbar button:hover svg{opacity:.7;}
 
-  .table-card{
-    background:var(--card-bg);
-    border:1px solid var(--divider);
-    border-radius:10px;
-    overflow:hidden;
-  }
+  .table-card{background:var(--card-bg);border:1px solid var(--divider);
+    border-radius:10px;overflow:hidden;}
 
-  /* grid rows */
-  .grid{
-    display:grid;
-    grid-template-columns:42% 44% 14%;
-  }
-  .head{
-    border-bottom:1px solid var(--divider);
-  }
-  .head .cell{
-    padding:18px 24px;
-    font-weight:700;
-    color:var(--title);
-    font-size:15px;
-    display:flex;align-items:center;gap:8px;
-  }
+  .grid{display:grid;grid-template-columns:42% 44% 14%;}
+  .head{border-bottom:1px solid var(--divider);}
+  .head .cell{padding:18px 24px;font-weight:700;color:var(--title);font-size:15px;
+    display:flex;align-items:center;gap:8px;}
   .cell.divider-l{border-left:1px solid var(--divider);}
   .head .cell.actions{justify-content:flex-end;}
-
   .sort{display:inline-flex;flex-direction:column;line-height:0;}
 
-  /* group header row */
-  .group{
-    display:flex;align-items:center;
-    padding:16px 24px;
-    border-top:1px solid var(--divider);
-    cursor:pointer;
-    background:var(--card-bg);
-  }
+  .group{display:flex;align-items:center;padding:16px 24px;
+    border-top:1px solid var(--divider);cursor:pointer;background:var(--card-bg);}
   .group:hover{background:var(--row-hover);}
-  .group .toggle{
-    background:none;border:none;cursor:pointer;padding:0;margin-right:14px;
-    display:inline-flex;
-  }
+  .group .toggle{background:none;border:none;cursor:pointer;padding:0;margin-right:14px;display:inline-flex;}
   .group-name{font-size:15.5px;font-weight:700;color:#1D2D3E;}
-  .maintained{
-    color:var(--muted);
-    font-size:14px;
-    margin-left:14px;
-    padding-left:14px;
-    border-left:1px solid #C9D3DD;
-  }
+  .subtitle{color:var(--muted);font-size:14px;margin-left:14px;padding-left:14px;
+    border-left:1px solid #C9D3DD;}
+  .chip{margin-left:14px;font-size:12.5px;font-weight:600;padding:3px 12px;border-radius:14px;white-space:nowrap;}
+  .chip.activa{background:#EBF5E6;color:#256F3A;}
+  .chip.planificada{background:#EAF3FF;color:#0070F2;}
+  .chip.finalizada{background:#EFEFEF;color:#6A6D70;}
   .group-actions{margin-left:auto;display:flex;gap:22px;}
-  .group-actions button,.row-action{
-    background:none;border:none;cursor:pointer;padding:2px;display:inline-flex;
-  }
+  .group-actions button,.row-action{background:none;border:none;cursor:pointer;padding:2px;display:inline-flex;}
   .group-actions button:hover svg,.row-action:hover svg{opacity:.7;}
 
-  /* child rows */
   .children{display:none;}
   .children.open{display:block;}
-  .child{
-    border-top:1px solid var(--divider);
-  }
-  .child .cell{
-    padding:16px 24px;
-    font-size:15px;
-    display:flex;align-items:center;
-    min-height:58px;
-  }
+  .child{border-top:1px solid var(--divider);}
+  .child .cell{padding:16px 24px;font-size:15px;display:flex;align-items:center;min-height:58px;}
   .child .cell.attr{padding-left:56px;color:var(--text);}
   .child .cell.val{color:var(--text);}
   .child .cell.act{justify-content:flex-end;}
@@ -124,43 +79,44 @@
 </style>
 </head>
 <body>
+
+  <!-- =================== SECCIÓN 1 · ATRIBUTOS DE MARKETING =================== -->
   <div class="panel">
     <div class="panel-header">
       <div class="panel-title">Atributos de Marketing (4)</div>
-      <div class="toolbar">
-        <!-- add -->
-        <button title="Anadir conjunto de atributos" aria-label="add">
-          <svg width="22" height="20" viewBox="0 0 22 20"><path d="M2 5 H12 M2 10 H11 M2 15 H8" stroke="#0070F2" stroke-width="1.6" stroke-linecap="round"/><path d="M17 8 V18 M12 13 H22" stroke="#0070F2" stroke-width="1.6" stroke-linecap="round"/></svg>
-        </button>
-        <!-- refresh -->
-        <button title="Actualizar" aria-label="refresh">
-          <svg width="20" height="20" viewBox="0 0 20 20"><path d="M16 10 A6 6 0 1 1 14.5 6" fill="none" stroke="#0070F2" stroke-width="1.6" stroke-linecap="round"/><path d="M15 2.5 L15 6.4 L11.1 6.4" fill="none" stroke="#0070F2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <!-- fullscreen -->
-        <button title="Pantalla completa" aria-label="fullscreen">
-          <svg width="20" height="20" viewBox="0 0 20 20"><path d="M3 7 V3 H7 M13 3 H17 V7 M17 13 V17 H13 M7 17 H3 V13" fill="none" stroke="#0070F2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <!-- collapse chevron -->
-        <button title="Contraer" aria-label="collapse" onclick="togglePanel(this)">
-          <svg width="20" height="20" viewBox="0 0 20 20"><path d="M5 12 L10 7 L15 12" fill="none" stroke="#0070F2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
+      <div class="toolbar" data-section="attrs"></div>
     </div>
-
-    <div class="table-card" id="tableCard">
-      <!-- header -->
+    <div class="table-card" id="card-attrs">
       <div class="grid head">
-        <div class="cell">Attributes
+        <div class="cell">Atributos
           <span class="sort"><svg width="10" height="14" viewBox="0 0 10 14"><path d="M5 0 L9 5 H1 Z" fill="#0070F2"/><path d="M5 14 L1 9 H9 Z" fill="#0070F2"/></svg></span>
         </div>
-        <div class="cell divider-l">Value
+        <div class="cell divider-l">Valor
           <span class="sort"><svg width="10" height="14" viewBox="0 0 10 14"><path d="M5 0 L9 5 H1 Z" fill="#0070F2"/><path d="M5 14 L1 9 H9 Z" fill="#0070F2"/></svg></span>
         </div>
-        <div class="cell actions divider-l">Actions</div>
+        <div class="cell actions divider-l">Acciones</div>
       </div>
+      <div id="groups-attrs"></div>
+    </div>
+  </div>
 
-      <!-- groups rendered by JS -->
-      <div id="groups"></div>
+  <!-- =================== SECCIÓN 2 · CAMPAÑAS =================== -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title">Campañas (3)</div>
+      <div class="toolbar" data-section="camp"></div>
+    </div>
+    <div class="table-card" id="card-camp">
+      <div class="grid head">
+        <div class="cell">Campaña
+          <span class="sort"><svg width="10" height="14" viewBox="0 0 10 14"><path d="M5 0 L9 5 H1 Z" fill="#0070F2"/><path d="M5 14 L1 9 H9 Z" fill="#0070F2"/></svg></span>
+        </div>
+        <div class="cell divider-l">Detalle
+          <span class="sort"><svg width="10" height="14" viewBox="0 0 10 14"><path d="M5 0 L9 5 H1 Z" fill="#0070F2"/><path d="M5 14 L1 9 H9 Z" fill="#0070F2"/></svg></span>
+        </div>
+        <div class="cell actions divider-l">Acciones</div>
+      </div>
+      <div id="groups-camp"></div>
     </div>
   </div>
 
@@ -169,27 +125,23 @@ const ICON = {
   minus:'<svg width="20" height="20" viewBox="0 0 20 20"><rect x="1.5" y="1.5" width="17" height="17" rx="3.5" fill="none" stroke="#0070F2" stroke-width="1.5"/><path d="M6 10 H14" stroke="#0070F2" stroke-width="1.6" stroke-linecap="round"/></svg>',
   plus:'<svg width="20" height="20" viewBox="0 0 20 20"><rect x="1.5" y="1.5" width="17" height="17" rx="3.5" fill="none" stroke="#0070F2" stroke-width="1.5"/><path d="M10 6 V14 M6 10 H14" stroke="#0070F2" stroke-width="1.6" stroke-linecap="round"/></svg>',
   pencil:'<svg width="20" height="20" viewBox="0 0 20 20"><path d="M13.3 3.4 l3.3 3.3 L7 16.3 l-4.1 .9 .9-4.1 Z" fill="none" stroke="#0070F2" stroke-width="1.4" stroke-linejoin="round"/></svg>',
-  close:'<svg width="20" height="20" viewBox="0 0 20 20"><path d="M5 5 L15 15 M15 5 L5 15" stroke="#0070F2" stroke-width="1.7" stroke-linecap="round"/></svg>'
+  close:'<svg width="20" height="20" viewBox="0 0 20 20"><path d="M5 5 L15 15 M15 5 L5 15" stroke="#0070F2" stroke-width="1.7" stroke-linecap="round"/></svg>',
+  add:'<svg width="22" height="20" viewBox="0 0 22 20"><path d="M2 5 H12 M2 10 H11 M2 15 H8" stroke="#0070F2" stroke-width="1.6" stroke-linecap="round"/><path d="M17 8 V18 M12 13 H22" stroke="#0070F2" stroke-width="1.6" stroke-linecap="round"/></svg>',
+  refresh:'<svg width="20" height="20" viewBox="0 0 20 20"><path d="M16 10 A6 6 0 1 1 14.5 6" fill="none" stroke="#0070F2" stroke-width="1.6" stroke-linecap="round"/><path d="M15 2.5 L15 6.4 L11.1 6.4" fill="none" stroke="#0070F2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  full:'<svg width="20" height="20" viewBox="0 0 20 20"><path d="M3 7 V3 H7 M13 3 H17 V7 M17 13 V17 H13 M7 17 H3 V13" fill="none" stroke="#0070F2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  chevron:'<svg width="20" height="20" viewBox="0 0 20 20"><path d="M5 12 L10 7 L15 12" fill="none" stroke="#0070F2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 };
 
-const groups = [
-  {
-    name:"Perfil Sociodemografico",
-    maintained:[5,5],
-    open:true,
-    attrs:[
+// ---------- Datos: Atributos de Marketing (todos plegados) ----------
+const attrGroups = [
+  { name:"Perfil Sociodemografico", subtitle:"5/5 atributos informados", open:false, attrs:[
       ["Rango de edad","35 - 44 anos"],
       ["Ubicacion","Madrid (capital)"],
       ["Situacion familiar","Pareja sin hijos"],
       ["Situacion laboral","Empleada por cuenta ajena"],
       ["Capacidad economica estimada","Media-alta"]
-    ]
-  },
-  {
-    name:"Preferencias de Inmueble",
-    maintained:[6,7],
-    open:true,
-    attrs:[
+  ]},
+  { name:"Preferencias de Inmueble", subtitle:"6/7 atributos informados", open:false, attrs:[
       ["Tipo de inmueble","Piso"],
       ["Zona de interes","Centro de Madrid"],
       ["Rango de precio objetivo","350.000 EUR - 450.000 EUR"],
@@ -197,49 +149,80 @@ const groups = [
       ["Estado del inmueble","Reformado"],
       ["Caracteristicas deseadas","Terraza  ·  Bien comunicado  ·  Ascensor"],
       ["Orientacion preferida",""]
-    ]
-  },
-  {
-    name:"Comportamiento Digital",
-    maintained:[6,6],
-    open:false,
-    attrs:[
+  ]},
+  { name:"Comportamiento Digital", subtitle:"6/6 atributos informados", open:false, attrs:[
       ["Canal de captacion","Email (Campana Verano)"],
       ["Portal de origen","BBVA Inmuebles"],
       ["Inmuebles vistos (ult. 30 dias)","8"],
       ["Favoritos guardados","3"],
       ["Nivel de interaccion","Alto (aperturas + clics)"],
       ["Busqueda guardada","Piso reformado centro con terraza"]
-    ]
-  },
-  {
-    name:"Intencion de Compra",
-    maintained:[6,6],
-    open:false,
-    attrs:[
+  ]},
+  { name:"Intencion de Compra", subtitle:"6/6 atributos informados", open:false, attrs:[
       ["Tipo de operacion","Compra"],
       ["Motivo de compra","Vivienda habitual"],
       ["Plazo de compra","3 - 6 meses"],
       ["Necesidad de financiacion","Si (hipoteca)"],
       ["Fase del customer journey","Cualificacion"],
       ["Potencial comercial (scoring)","Alto"]
-    ]
-  }
+  ]}
 ];
 
-function render(){
-  const container = document.getElementById("groups");
+// ---------- Datos: Campañas (todas plegadas) ----------
+const campGroups = [
+  { name:"Verano Inmuebles BBVA 2026", chip:"Activa", chipClass:"activa", subtitle:"Captacion · Email", open:false, attrs:[
+      ["Tipo de campana","Captacion"],
+      ["Canal","Email  ·  Portal  ·  Redes sociales"],
+      ["Periodo","01 jun 2026 - 30 sep 2026"],
+      ["Segmento objetivo","30-45 anos  ·  Madrid y Barcelona  ·  3 habitaciones"],
+      ["Oferta","-15% en activos seleccionados"],
+      ["Interaccion de Vanesa","Email abierto + clic en la oferta"],
+      ["Resultado para Vanesa","Lead generado (origen de la oportunidad)"]
+  ]},
+  { name:"Pisos Reformados Madrid Centro", chip:"Activa", chipClass:"activa", subtitle:"Nurturing · Email + Push", open:false, attrs:[
+      ["Tipo de campana","Nurturing"],
+      ["Canal","Email  ·  Notificacion push (App)"],
+      ["Periodo","15 sep 2026 - 15 nov 2026"],
+      ["Segmento objetivo","Interes en reformado  ·  zona centro de Madrid"],
+      ["Contenido","Seleccion de pisos reformados con terraza"],
+      ["Interaccion de Vanesa","2 aperturas de email"],
+      ["Resultado para Vanesa","En seguimiento"]
+  ]},
+  { name:"Jornada de Puertas Abiertas - Chamberi", chip:"Planificada", chipClass:"planificada", subtitle:"Evento · Email + WhatsApp", open:false, attrs:[
+      ["Tipo de campana","Evento"],
+      ["Canal","Email  ·  WhatsApp"],
+      ["Fecha","18 oct 2026"],
+      ["Segmento objetivo","Leads activos zona centro con interes alto"],
+      ["Contenido","Visita guiada a 5 inmuebles reformados"],
+      ["Interaccion de Vanesa","Invitacion enviada (pendiente de confirmar)"],
+      ["Resultado para Vanesa","Invitada"]
+  ]}
+];
+
+// ---------- Renderer generico ----------
+function renderToolbar(el){
+  el.innerHTML =
+    '<button title="Anadir" aria-label="add">'+ICON.add+'</button>'+
+    '<button title="Actualizar" aria-label="refresh">'+ICON.refresh+'</button>'+
+    '<button title="Pantalla completa" aria-label="fullscreen">'+ICON.full+'</button>'+
+    '<button title="Contraer" aria-label="collapse">'+ICON.chevron+'</button>';
+}
+
+function renderSection(groups, containerId){
+  const container = document.getElementById(containerId);
   container.innerHTML = "";
   groups.forEach((g, gi)=>{
     const grp = document.createElement("div");
 
     const header = document.createElement("div");
     header.className = "group";
-    header.onclick = (e)=>{ if(!e.target.closest(".group-actions")) toggleGroup(gi); };
+    header.onclick = (e)=>{ if(!e.target.closest(".group-actions")) { g.open=!g.open; renderSection(groups, containerId); } };
+    let meta = '';
+    if(g.chip){ meta += '<span class="chip '+g.chipClass+'">'+g.chip+'</span>'; }
+    if(g.subtitle){ meta += '<span class="subtitle">'+g.subtitle+'</span>'; }
     header.innerHTML =
       '<button class="toggle" aria-label="toggle">'+(g.open?ICON.minus:ICON.plus)+'</button>'+
-      '<span class="group-name">'+g.name+'</span>'+
-      '<span class="maintained">'+g.maintained[0]+'/'+g.maintained[1]+' atributos informados</span>'+
+      '<span class="group-name">'+g.name+'</span>'+ meta +
       '<span class="group-actions">'+
         '<button class="row-action" aria-label="edit">'+ICON.pencil+'</button>'+
         '<button class="row-action" aria-label="delete">'+ICON.close+'</button>'+
@@ -264,18 +247,22 @@ function render(){
   });
 }
 
-function toggleGroup(i){
-  groups[i].open = !groups[i].open;
-  render();
-}
-function togglePanel(btn){
-  const card = document.getElementById("tableCard");
-  const hidden = card.style.display==="none";
-  card.style.display = hidden ? "block":"none";
-  btn.querySelector("svg path").setAttribute("d", hidden ? "M5 12 L10 7 L15 12" : "M5 8 L10 13 L15 8");
-}
+// toolbars
+document.querySelectorAll('.toolbar').forEach(renderToolbar);
+// collapse whole card on chevron
+document.querySelectorAll('.toolbar').forEach(tb=>{
+  const sec = tb.getAttribute('data-section');
+  const card = document.getElementById('card-'+sec);
+  tb.querySelector('button[aria-label="collapse"]').onclick = ()=>{
+    const hidden = card.style.display==="none";
+    card.style.display = hidden ? "block":"none";
+    tb.querySelector('button[aria-label="collapse"] svg path')
+      .setAttribute("d", hidden ? "M5 12 L10 7 L15 12" : "M5 8 L10 13 L15 8");
+  };
+});
 
-render();
+renderSection(attrGroups, "groups-attrs");
+renderSection(campGroups, "groups-camp");
 </script>
 </body>
 </html>
