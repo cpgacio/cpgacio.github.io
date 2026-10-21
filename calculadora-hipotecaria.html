@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BBVA Inmuebles — Calculadora hipotecaria</title>
+<style>
+  :root{
+    --navy:#043263;
+    --navy-dark:#021b3a;
+    --blue:#1464a5;
+    --blue-bright:#1973b8;
+    --green:#48ae64;
+    --text:#121212;
+    --muted:#6b7280;
+    --line:#e3e6ea;
+    --bg:#ffffff;
+    --soft:#f2f4f6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Helvetica Neue",Arial,sans-serif;color:var(--text);background:var(--soft);line-height:1.45;font-size:14px}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* ---------- Top nav ---------- */
+  header.nav{background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:46px;font-size:13.5px}
+  .nav-left{display:flex;align-items:center;gap:26px;height:100%}
+  .brand{display:flex;align-items:center;gap:8px;font-weight:600}
+  .nav-left .link{color:#cdd8e6;padding:0 2px;height:100%;display:flex;align-items:center;cursor:pointer}
+  .nav-left .link.active{color:#fff;border-bottom:3px solid #fff}
+  .nav-left .link:hover{color:#fff}
+  .nav-right{display:flex;align-items:center;gap:14px;color:#cdd8e6}
+  .nav-right .sep{opacity:.5}
+  .nav-right .lang.active{color:#fff}
+
+  /* ---------- Layout ---------- */
+  .wrap{max-width:720px;margin:0 auto;padding:30px 28px 50px}
+  h1{font-size:28px;font-weight:700;color:#0a1c33;line-height:1.15}
+  .lead{color:var(--muted);margin:10px 0 26px;font-size:15px}
+
+  .card{border:1px solid var(--line);border-radius:10px;padding:26px;background:#fff;box-shadow:0 1px 4px rgba(10,28,51,.05)}
+  .calc-title{display:flex;align-items:center;gap:8px;color:var(--navy);font-weight:700;font-size:17px;margin-bottom:22px}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 26px}
+  .full{grid-column:1 / -1}
+
+  label{display:block;font-size:12.5px;color:#374151;margin-bottom:7px;font-weight:600}
+  .input-wrap{position:relative}
+  .input-wrap .unit{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none}
+  input[type=number],select{
+    width:100%;border:1px solid var(--line);border-radius:6px;padding:11px 12px;font-size:14px;font-family:inherit;color:#111;background:#fff}
+  input[type=number]{padding-right:34px}
+  input:focus,select:focus{outline:none;border-color:var(--blue)}
+
+  .range-head{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px}
+  .range-head b{color:var(--navy)}
+  input[type=range]{width:100%;accent-color:var(--navy);margin:2px 0}
+  .range-scale{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;margin-top:2px}
+
+  /* ---------- Result ---------- */
+  .quota{background:var(--navy);color:#fff;border-radius:10px;text-align:center;padding:22px;margin-top:26px}
+  .quota span{font-size:13px;opacity:.85}
+  .quota b{display:block;font-size:34px;margin-top:6px;font-weight:700}
+  .quota b small{font-size:16px;font-weight:400;opacity:.85}
+
+  .breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);border-radius:8px;margin-top:18px;overflow:hidden}
+  .bd{padding:16px 10px;text-align:center;border-right:1px solid var(--line)}
+  .bd:last-child{border-right:none}
+  .bd span{display:block;font-size:11px;color:var(--muted);letter-spacing:.3px;margin-bottom:6px}
+  .bd b{font-size:17px;color:#0a1c33}
+
+  .calc-note{color:var(--muted);font-size:11.5px;text-align:center;margin:18px 6px 0}
+  .btn-ghost{display:block;width:100%;border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:6px;padding:13px;font-weight:700;font-size:14px;margin-top:18px;cursor:pointer}
+  .btn-ghost:hover{background:var(--soft)}
+
+  /* ---------- Footer ---------- */
+  footer{background:var(--navy);color:#cdd8e6;margin-top:30px}
+  .foot{max-width:720px;margin:0 auto;padding:16px 28px;display:flex;justify-content:space-between;align-items:center;font-size:12.5px}
+  .foot .links{display:flex;gap:20px}
+  .foot .links a{color:#fff}
+
+  @media(max-width:620px){.grid{grid-template-columns:1fr}.breakdown{grid-template-columns:1fr}.bd{border-right:none;border-bottom:1px solid var(--line)}.bd:last-child{border-bottom:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <h1>Calculadora hipotecaria</h1>
+  <p class="lead">Estima la cuota mensual de tu hipoteca con el sistema de amortización francés. Ajusta el precio, la entrada, el plazo y el tipo de interés.</p>
+
+  <div class="card">
+    <div class="calc-title">&#128181; Calculadora hipotecaria</div>
+
+    <div class="grid">
+      <div class="full">
+        <label for="precio">Precio de la vivienda</label>
+        <div class="input-wrap">
+          <input type="number" id="precio" value="425000" min="0" step="1000">
+          <span class="unit">€</span>
+        </div>
+      </div>
+
+      <div class="full">
+        <div class="range-head">
+          <span>Entrada</span>
+          <b><span id="entradaPct">20</span>% · <span id="entradaImp">€85,000</span></b>
+        </div>
+        <input type="range" id="entrada" min="5" max="50" value="20" step="1">
+        <div class="range-scale"><span>5%</span><span>50%</span></div>
+      </div>
+
+      <div>
+        <label for="plazo">Plazo</label>
+        <select id="plazo">
+          <option value="40">40 años</option>
+          <option value="35">35 años</option>
+          <option value="30" selected>30 años</option>
+          <option value="25">25 años</option>
+          <option value="20">20 años</option>
+          <option value="15">15 años</option>
+          <option value="10">10 años</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="tipo">Tipo de interés (TIN)</label>
+        <div class="input-wrap">
+          <input type="number" id="tipo" value="3.5" min="0" max="20" step="0.1">
+          <span class="unit">%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="quota">
+      <span>Cuota mensual estimada</span>
+      <b id="cuota">€1,527<small>/mes</small></b>
+    </div>
+
+    <div class="breakdown">
+      <div class="bd"><span>IMPORTE DEL PRÉSTAMO</span><b id="prestamo">€340,000</b></div>
+      <div class="bd"><span>TOTAL INTERESES</span><b id="intereses">€209,720</b></div>
+      <div class="bd"><span>TOTAL A PAGAR</span><b id="total">€549,720</b></div>
+    </div>
+
+    <div class="calc-note">Tipo fijo orientativo. Cálculo con el sistema de amortización francés sin vinculación contractual ni comisiones/seguros incluidos.</div>
+
+    <button class="btn-ghost">Solicitar hipoteca BBVA</button>
+  </div>
+</div>
+
+<script>
+  const $ = id => document.getElementById(id);
+  const euro = n => '€' + Math.round(n).toLocaleString('en-US');
+
+  function calcular(){
+    const precio  = parseFloat($('precio').value) || 0;
+    const entPct  = parseFloat($('entrada').value) || 0;
+    const anios   = parseFloat($('plazo').value) || 0;
+    const tinAnu  = parseFloat($('tipo').value) || 0;
+
+    const entrada  = precio * entPct / 100;
+    const prestamo = Math.max(precio - entrada, 0);
+    const n        = anios * 12;
+    const i        = tinAnu / 100 / 12;
+
+    let cuota;
+    if (prestamo === 0 || n === 0){
+      cuota = 0;
+    } else if (i === 0){
+      cuota = prestamo / n;                     // sin intereses
+    } else {
+      // Sistema francés: cuota constante
+      cuota = prestamo * (i * Math.pow(1 + i, n)) / (Math.pow(1 + i, n) - 1);
+    }
+
+    const totalPagado = cuota * n;
+    const intereses   = Math.max(totalPagado - prestamo, 0);
+
+    // Actualizar interfaz
+    $('entradaPct').textContent = entPct;
+    $('entradaImp').textContent = euro(entrada);
+    $('cuota').innerHTML        = euro(cuota) + '<small>/mes</small>';
+    $('prestamo').textContent   = euro(prestamo);
+    $('intereses').textContent  = euro(intereses);
+    $('total').textContent      = euro(totalPagado);
+  }
+
+  ['precio','entrada','plazo','tipo'].forEach(id => {
+    $(id).addEventListener('input', calcular);
+    $(id).addEventListener('change', calcular);
+  });
+
+  calcular();
+</script>
+
+</body>
+</html>
